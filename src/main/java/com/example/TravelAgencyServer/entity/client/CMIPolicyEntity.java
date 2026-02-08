@@ -1,7 +1,13 @@
 package com.example.TravelAgencyServer.entity.client;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class CMIPolicyEntity {
     @Id
@@ -15,44 +21,9 @@ public class CMIPolicyEntity {
     private String CMIPolicy;
     private String image;
 
-    public CMIPolicyEntity() {}
-
-    public CMIPolicyEntity(Long id, ClientEntity client, String CMIPolicy, String image) {
-        this.id = id;
+    public CMIPolicyEntity(ClientEntity client, String CMIPolicy, String image) {
         this.client = client;
         this.CMIPolicy = CMIPolicy;
-        this.image = image;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public String getCMIPolicy() {
-        return CMIPolicy;
-    }
-
-    public void setCMIPolicy(String CMIPolicy) {
-        this.CMIPolicy = CMIPolicy;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
         this.image = image;
     }
 }

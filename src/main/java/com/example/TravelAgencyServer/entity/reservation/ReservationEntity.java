@@ -4,10 +4,17 @@ import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.entity.hotel.HotelEntity;
 import com.example.TravelAgencyServer.entity.tour.TourEntity;
-import com.example.TravelAgencyServer.entity.transfer.TransferEntity;
 import com.example.TravelAgencyServer.entity.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class ReservationEntity {
     @Id
@@ -26,120 +33,23 @@ public class ReservationEntity {
     @JoinColumn(name = "tour_id", nullable = false)
     private TourEntity tour;
 
-    @ManyToOne
-    @JoinColumn(name = "flight_from", nullable = false)
-    private FlightEntity flightFrom;
-
-    @ManyToOne
-    @JoinColumn(name = "flight_to", nullable = false)
-    private FlightEntity flightTo;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    private List<FlightEntity> flights;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
     private HotelEntity hotel;
 
-    @ManyToOne
-    @JoinColumn(name = "transfer_hotel_to", nullable = false)
-    private TransferEntity transferToHotel;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Status status;
 
-    @ManyToOne
-    @JoinColumn(name = "transfer_hotel_from", nullable = false)
-    private TransferEntity transferFromHotel;
-
-    private StatusEntity status;
-
-    public ReservationEntity(){}
-
-    public ReservationEntity(Long id, UserEntity user, ClientEntity client, TourEntity tour, FlightEntity flightFrom, FlightEntity flightTo, HotelEntity hotel, TransferEntity transferToHotel, TransferEntity transferFromHotel, StatusEntity status) {
-        this.id = id;
+    public ReservationEntity(UserEntity user, ClientEntity client, TourEntity tour, List<FlightEntity> flights, HotelEntity hotel, Status status) {
         this.user = user;
         this.client = client;
         this.tour = tour;
-        this.flightFrom = flightFrom;
-        this.flightTo = flightTo;
+        this.flights = flights;
         this.hotel = hotel;
-        this.transferToHotel = transferToHotel;
-        this.transferFromHotel = transferFromHotel;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public TourEntity getTour() {
-        return tour;
-    }
-
-    public void setTour(TourEntity tour) {
-        this.tour = tour;
-    }
-
-    public FlightEntity getFlightFrom() {
-        return flightFrom;
-    }
-
-    public void setFlightFrom(FlightEntity flightFrom) {
-        this.flightFrom = flightFrom;
-    }
-
-    public FlightEntity getFlightTo() {
-        return flightTo;
-    }
-
-    public void setFlightTo(FlightEntity flightTo) {
-        this.flightTo = flightTo;
-    }
-
-    public HotelEntity getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(HotelEntity hotel) {
-        this.hotel = hotel;
-    }
-
-    public TransferEntity getTransferToHotel() {
-        return transferToHotel;
-    }
-
-    public void setTransferToHotel(TransferEntity transferToHotel) {
-        this.transferToHotel = transferToHotel;
-    }
-
-    public TransferEntity getTransferFromHotel() {
-        return transferFromHotel;
-    }
-
-    public void setTransferFromHotel(TransferEntity transferFromHotel) {
-        this.transferFromHotel = transferFromHotel;
-    }
-
-    public StatusEntity getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEntity status) {
         this.status = status;
     }
 }

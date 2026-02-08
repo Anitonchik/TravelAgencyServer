@@ -1,7 +1,13 @@
 package com.example.TravelAgencyServer.entity.client;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class ClientPassportEntity {
     @Id
@@ -16,53 +22,10 @@ public class ClientPassportEntity {
     private String numbers;
     private String image;
 
-    public ClientPassportEntity() {}
-
-    public ClientPassportEntity(Long id, ClientEntity client, String series, String numbers, String image) {
-        this.id = id;
+    public ClientPassportEntity(ClientEntity client, String series, String numbers, String image) {
         this.client = client;
         this.series = series;
         this.numbers = numbers;
-        this.image = image;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ClientEntity getClient() {
-        return client;
-    }
-
-    public void setClient(ClientEntity client) {
-        this.client = client;
-    }
-
-    public String getSeries() {
-        return series;
-    }
-
-    public void setSeries(String series) {
-        this.series = series;
-    }
-
-    public String getNumbers() {
-        return numbers;
-    }
-
-    public void setNumbers(String numbers) {
-        this.numbers = numbers;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
         this.image = image;
     }
 }

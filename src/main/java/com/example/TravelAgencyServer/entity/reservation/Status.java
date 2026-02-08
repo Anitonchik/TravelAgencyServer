@@ -1,6 +1,6 @@
 package com.example.TravelAgencyServer.entity.reservation;
 
-public enum StatusEntity {
+public enum Status {
     CONFIRMED,
     EXPECTATION,
     CANCELLED
