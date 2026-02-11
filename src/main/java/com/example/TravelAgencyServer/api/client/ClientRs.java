@@ -1,4 +1,4 @@
-package com.example.TravelAgencyServer.api;
+package com.example.TravelAgencyServer.api.client;
 
 import lombok.Builder;
 

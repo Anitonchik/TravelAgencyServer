@@ -18,10 +18,13 @@ public class CMIPolicyEntity {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
-    private String CMIPolicy;
-    private String image;
+    @Column(unique = true, nullable = false)
+    private byte[] CMIPolicy;
 
-    public CMIPolicyEntity(ClientEntity client, String CMIPolicy, String image) {
+    @Column(unique = true, nullable = false)
+    private byte[] image;
+
+    public CMIPolicyEntity(ClientEntity client, byte[] CMIPolicy, byte[] image) {
         this.client = client;
         this.CMIPolicy = CMIPolicy;
         this.image = image;

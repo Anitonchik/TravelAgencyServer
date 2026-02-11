@@ -1,8 +1,8 @@
 package com.example.TravelAgencyServer.service;
 
-import com.example.TravelAgencyServer.api.ClientRq;
-import com.example.TravelAgencyServer.api.ClientRs;
-import com.example.TravelAgencyServer.api.Mappers;
+import com.example.TravelAgencyServer.api.client.ClientMappers;
+import com.example.TravelAgencyServer.api.client.ClientRq;
+import com.example.TravelAgencyServer.api.client.ClientRs;
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientRepository;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.crypto.*;
 import java.util.List;
 
 @Service
@@ -19,7 +18,7 @@ public class ClientService {
     private ClientRepository repository;
 
     @Autowired
-    private Mappers mapper;
+    private ClientMappers mapper;
 
     @Autowired
     private CipherService cipherService;
@@ -46,7 +45,6 @@ public class ClientService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public List<ClientRs> getAll() {
         return mapper.ClientEntityListToClientRsList(repository.findAll(), cipherService);
@@ -67,7 +65,8 @@ public class ClientService {
     }
 
     @Transactional
-    public void delete(Long id){
+    public boolean delete(Long id){
         repository.findById(id).ifPresent(clientEntity -> repository.delete(clientEntity));
+        return repository.existsById(id);
     }
 }

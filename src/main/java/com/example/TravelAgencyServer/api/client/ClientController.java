@@ -1,5 +1,6 @@
-package com.example.TravelAgencyServer.api;
+package com.example.TravelAgencyServer.api.client;
 
+import com.example.TravelAgencyServer.api.Constants;
 import com.example.TravelAgencyServer.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping(Constants.API_URL + ClientController.URL)
+@RequestMapping(Constants.API_URL + ClientController.URL)
 public class ClientController {
     public static final String URL = "/client";
 
@@ -34,8 +35,8 @@ public class ClientController {
         return service.update(dto, clientId);
     }
 
-    @DeleteMapping
-    public void delete(@PathVariable Long clientId) {
-        service.delete(clientId);
+    @DeleteMapping("{clientId}")
+    public boolean delete(@PathVariable Long clientId) {
+        return service.delete(clientId);
     }
 }

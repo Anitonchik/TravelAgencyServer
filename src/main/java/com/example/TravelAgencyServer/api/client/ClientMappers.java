@@ -1,14 +1,13 @@
-package com.example.TravelAgencyServer.api;
+package com.example.TravelAgencyServer.api.client;
 
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.service.CipherService;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface Mappers {
+public interface ClientMappers {
     @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "snils", expression = "java(cipherService.encryptData(clientRq.snils()))")

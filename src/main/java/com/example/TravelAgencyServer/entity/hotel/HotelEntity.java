@@ -22,19 +22,31 @@ public class HotelEntity {
     @JoinColumn(name = "tour_id")
     private TourEntity tour;
 
-    @NotEmpty
+    @Column(nullable = false)
     private String name;
-    @NotEmpty
+    @Column(nullable = false)
     private int durationOfStay;
-    @NotEmpty
+    @Column(nullable = false)
     private int numberOfPlacesInTheRoom;
-    @NotEmpty
+    @Column(nullable = false)
     private Double price;
-    @NotEmpty
+    @Column(unique = true, nullable = false)
     private String location;
-    @NotEmpty
+    @Column(nullable = false)
     private String image;
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private FoodType foodType;
+
+    public HotelEntity(TourEntity tour, String name, int durationOfStay, int numberOfPlacesInTheRoom, Double price,
+                       String location, String image, FoodType foodType) {
+        this.tour = tour;
+        this.name = name;
+        this.durationOfStay = durationOfStay;
+        this.numberOfPlacesInTheRoom = numberOfPlacesInTheRoom;
+        this.price = price;
+        this.location = location;
+        this.image = image;
+        this.foodType = foodType;
+    }
 }

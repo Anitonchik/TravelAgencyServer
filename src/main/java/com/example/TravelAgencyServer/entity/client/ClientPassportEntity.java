@@ -18,11 +18,14 @@ public class ClientPassportEntity {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
-    private String series;
-    private String numbers;
-    private String image;
+    @Column(unique = true, nullable = false)
+    private byte[] series;
+    @Column(unique = true, nullable = false)
+    private byte[] numbers;
+    @Column(unique = true, nullable = false)
+    private byte[] image;
 
-    public ClientPassportEntity(ClientEntity client, String series, String numbers, String image) {
+    public ClientPassportEntity(ClientEntity client, byte[] series, byte[] numbers, byte[] image) {
         this.client = client;
         this.series = series;
         this.numbers = numbers;

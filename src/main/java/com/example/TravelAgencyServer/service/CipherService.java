@@ -4,13 +4,10 @@ import com.example.TravelAgencyServer.exceptions.CipherException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
 
 @Service
@@ -19,8 +16,6 @@ public class CipherService {
 
     byte[] keyBytes = Base64.getDecoder().decode(BASE64_KEY);
     SecretKey secretKey = new SecretKeySpec(keyBytes, "AES");
-
-    //byte[] iv;
 
     public byte[] encryptData(String data) {
         try {

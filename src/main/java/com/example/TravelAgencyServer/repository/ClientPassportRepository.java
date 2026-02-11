@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientPassportEntityRepository extends JpaRepository<ClientPassportEntity, Long> {
+public interface ClientPassportRepository extends JpaRepository<ClientPassportEntity, Long> {
 }

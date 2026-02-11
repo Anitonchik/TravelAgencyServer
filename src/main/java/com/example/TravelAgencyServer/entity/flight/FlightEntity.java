@@ -27,9 +27,13 @@ public class FlightEntity {
     @JoinColumn(name="reservation_id")
     private ReservationEntity reservation;
 
+    @Column(nullable = false)
     private String airlineName;
+    @Column(nullable = false)
     private String locationFrom;
+    @Column(nullable = false)
     private String locationTo;
+    @Column(nullable = false)
     private Date date;
 
     public FlightEntity(TourEntity tour, String airlineName, String locationFrom, String locationTo, Date date) {
