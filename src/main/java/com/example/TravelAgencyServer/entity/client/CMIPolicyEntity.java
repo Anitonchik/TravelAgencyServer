@@ -14,7 +14,7 @@ public class CMIPolicyEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
@@ -24,9 +24,13 @@ public class CMIPolicyEntity {
     @Column(unique = true, nullable = false)
     private byte[] image;
 
+    @Column(nullable = false)
+    private boolean isActive;
+
     public CMIPolicyEntity(ClientEntity client, byte[] CMIPolicy, byte[] image) {
         this.client = client;
         this.CMIPolicy = CMIPolicy;
         this.image = image;
+        this.isActive = true;
     }
 }

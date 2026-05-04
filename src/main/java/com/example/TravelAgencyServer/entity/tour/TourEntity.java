@@ -43,15 +43,21 @@ public class TourEntity {
     @Column(nullable = false)
     private TourIntensity tourIntensity;
 
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
-    private List<FlightEntity> tourFlights;
+    @ManyToMany
+    @JoinTable(name="tour_flight",
+            joinColumns=  @JoinColumn(name="tour_id", referencedColumnName="id"),
+            inverseJoinColumns= @JoinColumn(name="flight_id", referencedColumnName="id") )
+    private List<FlightEntity> flights;
 
-    @OneToMany(mappedBy = "tour", cascade = CascadeType.ALL)
-    private List<HotelEntity> tourHotels;
+    @ManyToMany
+    @JoinTable(name="tour_hotel",
+            joinColumns=  @JoinColumn(name="tour_id", referencedColumnName="id"),
+            inverseJoinColumns= @JoinColumn(name="hotel_id", referencedColumnName="id") )
+    private List<HotelEntity> hotels;
 
     public TourEntity(String name, String direction, String description, String duration, int numberOfSeats, Double price,
                       Date dateFrom, Date dateTo, Boolean isTransferExists, Boolean isInsurancesExists, TourType tourType,
-                      TourIntensity tourIntensity, List<FlightEntity> tourFlights, List<HotelEntity> tourHotels) {
+                      TourIntensity tourIntensity, List<FlightEntity> flights, List<HotelEntity> hotels) {
         this.name = name;
         this.direction = direction;
         this.description = description;
@@ -64,7 +70,7 @@ public class TourEntity {
         this.isInsurancesExists = isInsurancesExists;
         this.tourType = tourType;
         this.tourIntensity = tourIntensity;
-        this.tourFlights = tourFlights;
-        this.tourHotels = tourHotels;
+        this.flights = flights;
+        this.hotels = hotels;
     }
 }

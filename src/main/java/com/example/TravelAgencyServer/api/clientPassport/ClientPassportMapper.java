@@ -12,13 +12,12 @@ import java.util.List;
 public interface ClientPassportMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "client", expression = "java(clientService.findById(rq.clientId()))"),
+            @Mapping(target = "client", ignore = true),
             @Mapping(target = "series", expression = "java(cipherService.encryptData(rq.series()))"),
             @Mapping(target = "numbers", expression = "java(cipherService.encryptData(rq.numbers()))"),
             @Mapping(target = "image", expression = "java(cipherService.encryptData(rq.image()))")
     })
-    ClientPassportEntity RqToEntity(ClientPassportRq rq, @Context ClientService clientService,
-                                    @Context CipherService cipherService);
+    ClientPassportEntity RqToEntity(ClientPassportRq rq, @Context CipherService cipherService);
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
@@ -26,11 +25,11 @@ public interface ClientPassportMapper {
             @Mapping(target = "numbers", expression = "java(cipherService.encryptData(rq.numbers()))"),
             @Mapping(target = "image", expression = "java(cipherService.encryptData(rq.image()))")
     })
-    ClientPassportEntity updateEntity(ClientPassportWithoutClientRq rq, @MappingTarget ClientPassportEntity entity,
+    ClientPassportEntity updateEntity(ClientPassportRq rq, @MappingTarget ClientPassportEntity entity,
                                       @Context CipherService cipherService);
 
 
-    @Mappings({
+    /*@Mappings({
             @Mapping(target = "client", expression = "java(clientMappers.ClientEntityToClientRs(entity.getClient(), cipherService))"),
             @Mapping(target = "series", expression = "java(cipherService.decryptData(entity.getSeries()))"),
             @Mapping(target = "numbers", expression = "java(cipherService.decryptData(entity.getNumbers()))"),
@@ -40,5 +39,5 @@ public interface ClientPassportMapper {
                                     @Context CipherService cipherService);
 
     List<ClientPassportRs> ListEntityToListRs(List<ClientPassportEntity> entities, @Context ClientMappers clientMappers,
-                                              @Context CipherService cipherService);
+                                              @Context CipherService cipherService);*/
 }

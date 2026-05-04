@@ -14,7 +14,7 @@ public class ClientPassportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private ClientEntity client;
 
@@ -24,11 +24,14 @@ public class ClientPassportEntity {
     private byte[] numbers;
     @Column(unique = true, nullable = false)
     private byte[] image;
+    @Column(nullable = false)
+    private boolean isActive;
 
     public ClientPassportEntity(ClientEntity client, byte[] series, byte[] numbers, byte[] image) {
         this.client = client;
         this.series = series;
         this.numbers = numbers;
         this.image = image;
+        this.isActive = true;
     }
 }

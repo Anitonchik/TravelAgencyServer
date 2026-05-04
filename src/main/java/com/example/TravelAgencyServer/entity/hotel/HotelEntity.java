@@ -1,5 +1,6 @@
 package com.example.TravelAgencyServer.entity.hotel;
 
+import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
 import com.example.TravelAgencyServer.entity.tour.TourEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,7 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,29 +22,33 @@ public class HotelEntity {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "tour_id")
-    private TourEntity tour;
-
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private int durationOfStay;
+
     @Column(nullable = false)
     private int numberOfPlacesInTheRoom;
+
     @Column(nullable = false)
     private Double price;
+
     @Column(unique = true, nullable = false)
     private String location;
+
     @Column(nullable = false)
     private String image;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FoodType foodType;
 
-    public HotelEntity(TourEntity tour, String name, int durationOfStay, int numberOfPlacesInTheRoom, Double price,
+    @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
+    private List<ReservationEntity> reservations = new ArrayList<>();
+
+    public HotelEntity(String name, int durationOfStay, int numberOfPlacesInTheRoom, Double price,
                        String location, String image, FoodType foodType) {
-        this.tour = tour;
         this.name = name;
         this.durationOfStay = durationOfStay;
         this.numberOfPlacesInTheRoom = numberOfPlacesInTheRoom;

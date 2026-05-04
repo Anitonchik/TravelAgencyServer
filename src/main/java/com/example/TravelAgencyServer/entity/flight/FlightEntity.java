@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -19,14 +19,6 @@ public class FlightEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="tour_id")
-    private TourEntity tour;
-
-    @ManyToOne
-    @JoinColumn(name="reservation_id")
-    private ReservationEntity reservation;
-
     @Column(nullable = false)
     private String airlineName;
     @Column(nullable = false)
@@ -36,8 +28,13 @@ public class FlightEntity {
     @Column(nullable = false)
     private Date date;
 
-    public FlightEntity(TourEntity tour, String airlineName, String locationFrom, String locationTo, Date date) {
-        this.tour = tour;
+    @OneToMany(mappedBy="flightTo", fetch = FetchType.LAZY)
+    private List<ReservationEntity> reservationsTo = new ArrayList<>();
+
+    @OneToMany(mappedBy="flightFrom", fetch = FetchType.LAZY)
+    private List<ReservationEntity> reservationsFrom = new ArrayList<>();
+
+    public FlightEntity(String airlineName, String locationFrom, String locationTo, Date date) {
         this.airlineName = airlineName;
         this.locationFrom = locationFrom;
         this.locationTo = locationTo;

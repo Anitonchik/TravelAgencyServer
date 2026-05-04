@@ -5,10 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Status {
-    CONFIRMED("Подтверждено"),
-    EXPECTATION("Ожидает"),
-    CANCELLED("Отменено");
+public enum PaymentType {
+    CASH("Наличные"),
+    SBP("СБП");
 
     private final String title;
 }

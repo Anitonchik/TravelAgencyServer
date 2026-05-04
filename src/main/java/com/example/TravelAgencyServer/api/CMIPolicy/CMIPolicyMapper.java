@@ -13,14 +13,14 @@ public interface CMIPolicyMapper {
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "client", expression = "java(clientService.findById(dto.clientId()))"),
+            @Mapping(target = "client", ignore = true),
             @Mapping(target = "CMIPolicy", expression = "java(cipherService.encryptData(dto.CMIPolicy()))"),
             @Mapping(target = "image", expression = "java(cipherService.encryptData(dto.image()))")
     })
-    CMIPolicyEntity RqToEntity(CMIPolicyRq dto, @Context ClientService clientService,
+    CMIPolicyEntity RqToEntity(CMIPolicyRq dto,
                                @Context CipherService cipherService);
 
-    @Mappings({
+   /* @Mappings({
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "client", ignore = true),
             @Mapping(target = "CMIPolicy", expression = "java(cipherService.encryptData(rq.CMIPolicy()))"),
@@ -30,7 +30,7 @@ public interface CMIPolicyMapper {
                                  @Context CipherService cipherService);
 
 
-    @Mappings({
+   /* @Mappings({
             @Mapping(target = "client", expression = "java(clientMappers.ClientEntityToClientRs(entity.getClient(), cipherService))"),
             @Mapping(target = "CMIPolicy", expression = "java(cipherService.decryptData(entity.getCMIPolicy()))"),
             @Mapping(target = "image", expression = "java(cipherService.decryptData(entity.getImage()))")
@@ -39,5 +39,5 @@ public interface CMIPolicyMapper {
                                 @Context CipherService cipherService);
 
     List<CMIPolicyRs> ListEntityToListRs(List<CMIPolicyEntity> entities, @Context ClientMappers clientMappers,
-                                              @Context CipherService cipherService);
+                                              @Context CipherService cipherService);*/
 }

@@ -1,4 +1,4 @@
-package com.example.TravelAgencyServer.entity.user;
+package com.example.TravelAgencyServer.entity.manager;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class ManagerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,19 +22,18 @@ public class UserEntity {
     @Column(nullable = false)
     private String surName;
     @Column(nullable = false)
-    private UserRole userRole;
-    @Column(nullable = false)
     private Date birthDate;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, unique = true)
     private String phone;
 
-    public UserEntity(String firstName, String lastName, String surName, Date birthDate, String email, String phone) {
+
+
+    public ManagerEntity(String firstName, String lastName, String surName, Date birthDate, String email, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.surName = surName;
-        this.userRole = UserRole.MANAGER;
         this.birthDate = birthDate;
         this.email = email;
         this.phone = phone;
