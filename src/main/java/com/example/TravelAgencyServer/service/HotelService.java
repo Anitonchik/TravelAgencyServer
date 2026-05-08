@@ -70,4 +70,8 @@ public class HotelService {
         repository.findById(id).ifPresent(clientEntity -> repository.delete(clientEntity));
         return repository.existsById(id);
     }
+
+    public HotelRs entityToRs(HotelEntity entity){
+        return mapper.EntityToRs(entity);
+    }
 }

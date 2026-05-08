@@ -12,16 +12,57 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
-    @Query("SELECT * FROM client_entity c" +
-            "JOIN client_passport_entity p ON c.id = p.client_id" +
-            "JOIN cmipolicy_entity cmi ON c.id = cmi.client_id" +
-            "WHERE c.id = :id AND " +
-            "p.is_active = true AND cmi.is_active = true AND c.id_deleted = false")
+    @Query(value = """
+    SELECT DISTINCT c.id,
+    c.first_name,
+    c.last_name,
+    c.sur_name,
+    c.birth_date,
+    c.snils,
+    c.email,
+    c.phone,
+    c.preference_description,
+    p.id as passportId,
+    p.series as passportSeries,
+    p.numbers as passportNumbers,
+    p.image as passportImage,
+    cmi.id as policyId,
+    cmi.CMIPolicy as CMIPolicy,
+    cmi.image as policyImage
+    FROM client_entity c
+    JOIN client_passport_entity p ON c.id = p.client_id
+    JOIN cmipolicy_entity cmi ON c.id = cmi.client_id
+    WHERE c.id = :id
+      AND p.is_active = true
+      AND cmi.is_active = true
+      AND c.is_deleted = false
+    LIMIT 1
+""", nativeQuery = true)
     Optional<ClientPassportCMIPolicyEntity> getClientPassportPolicy(Long id);
 
-    @Query("SELECT * FROM client_entity c" +
-            "JOIN client_passport_entity p ON c.id = p.client_id" +
-            "JOIN cmipolicy_entity cmi ON c.id = cmi.client_id" +
-            "WHERE p.is_active = true AND cmi.is_active = true AND c.id_deleted = false")
+    @Query(value = """
+    SELECT DISTINCT c.id,
+    c.first_name,
+    c.last_name,
+    c.sur_name,
+    c.birth_date,
+    c.snils,
+    c.email,
+    c.phone,
+    c.preference_description,
+    p.id as passportId,
+    p.series as passportSeries,
+    p.numbers as passportNumbers,
+    p.image as passportImage,
+    cmi.id as policyId,
+    cmi.CMIPolicy as CMIPolicy,
+    cmi.image as policyImage
+    FROM client_entity c
+    JOIN client_passport_entity p ON c.id = p.client_id
+    JOIN cmipolicy_entity cmi ON c.id = cmi.client_id
+    WHERE p.is_active = true
+      AND cmi.is_active = true
+      AND c.is_deleted = false
+""", nativeQuery = true)
     List<ClientPassportCMIPolicyEntity> getAllClientPassportPolicy();
 }

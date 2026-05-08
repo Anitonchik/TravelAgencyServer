@@ -1,12 +1,13 @@
 package com.example.TravelAgencyServer.service;
 
-import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyMapper;
 import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRq;
-import com.example.TravelAgencyServer.api.client.ClientMappers;
+import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRs;
+import com.example.TravelAgencyServer.api.client.ClientMapper;
+import com.example.TravelAgencyServer.api.client.ClientPassportCMIPolicyEntity;
 import com.example.TravelAgencyServer.api.client.ClientRq;
 import com.example.TravelAgencyServer.api.client.ClientRs;
-import com.example.TravelAgencyServer.api.clientPassport.ClientPassportMapper;
 import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRq;
+import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRs;
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class ClientService {
     private ClientRepository repository;
 
     @Autowired
-    private ClientMappers mapper;
+    private ClientMapper mapper;
 
     @Autowired
     private CipherService cipherService;
@@ -32,12 +34,6 @@ public class ClientService {
 
     @Autowired
     private CMIPolicyService cmiPolicyService;
-
-    @Autowired
-    private ClientPassportMapper clientPassportMapper;
-
-    @Autowired
-    private CMIPolicyMapper cmiPolicyMapper;
 
 
     @Transactional
@@ -55,8 +51,7 @@ public class ClientService {
     public ClientRs getById(Long id) {
         var entity = repository.getClientPassportPolicy(id);
         if (entity.isPresent()) {
-            return mapper.ClientPassportCMIPolicyEntityToClientRs(entity.get(), cipherService,
-                    clientPassportMapper, cmiPolicyMapper);
+            return decryptData(entity.get());
         }
         else {
             throw new EntityNotExistsException(id, "Клиент не существует");
@@ -65,14 +60,19 @@ public class ClientService {
 
     @Transactional(readOnly = true)
     public List<ClientRs> getAll() {
-        return mapper.ClientEntityListToClientRsList(repository.getAllClientPassportPolicy(), cipherService,
-                clientPassportMapper, cmiPolicyMapper);
-
+        var entities = repository.getAllClientPassportPolicy();
+        List<ClientRs> clients = new ArrayList<>();
+        for (var entity : entities) {
+            clients.add(decryptData(entity));
+        }
+        return clients;
     }
 
     @Transactional
     public ClientRs create(ClientRq dto) {
-        var entity = repository.save(mapper.ClientRqToClientEntity(dto, cipherService));
+        var entity = mapper.ClientRqToClientEntity(dto);
+        entity.setSnils(cipherService.encryptData(dto.snils()));
+        repository.save(entity);
 
         var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(), dto.passportNumbers(), dto.policyImage());
         clientPassportService.create(passportRq);
@@ -82,7 +82,7 @@ public class ClientService {
 
         var newEntity = repository.getClientPassportPolicy(entity.getId());
         if (newEntity.isPresent()) {
-            return mapper.ClientPassportCMIPolicyEntityToClientRs(newEntity.get(), cipherService, clientPassportMapper, cmiPolicyMapper);
+            return mapper.ClientPassportCMIPolicyEntityToClientRs(newEntity.get());
         }
         throw new EntityNotExistsException(entity.getId(), "Клиента не существует");
     }
@@ -90,7 +90,7 @@ public class ClientService {
     @Transactional
     public ClientRs update(ClientRq dto, Long id) {
         var entity = findById(id);
-        entity = mapper.UpdateClientRqToClientEntity(dto, entity, cipherService);
+        entity = mapper.UpdateClientRqToClientEntity(dto, entity);
 
         var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(), dto.passportNumbers(), dto.policyImage());
         clientPassportService.update(entity.getId(), passportRq);
@@ -100,7 +100,7 @@ public class ClientService {
 
         var newEntity = repository.getClientPassportPolicy(entity.getId());
         if (newEntity.isPresent()) {
-            return mapper.ClientPassportCMIPolicyEntityToClientRs(newEntity.get(), cipherService, clientPassportMapper, cmiPolicyMapper);
+            return decryptData(newEntity.get());
         }
         throw new EntityNotExistsException(entity.getId(), "Клиента не существует");
     }
@@ -111,5 +111,27 @@ public class ClientService {
         entity.setDeleted(true);
         repository.save(entity);
         return true;
+    }
+
+    public ClientRs entityToRs(ClientEntity entity) {
+        return mapper.ClientEntityToClientRs(entity);
+    }
+
+    private ClientRs decryptData(ClientPassportCMIPolicyEntity entity) {
+        var dto = mapper.ClientPassportCMIPolicyEntityToClientRs(entity);
+        dto.setSnils(cipherService.decryptData(entity.getSnils()));
+
+        var passport = new ClientPassportRs(entity.getPassportId(),
+                cipherService.decryptData(entity.getPassportSeries()),
+                cipherService.decryptData(entity.getPassportNumbers()),
+                cipherService.decryptData(entity.getPassportImage()));
+        dto.setPassport(passport);
+
+        var policy = new CMIPolicyRs(entity.getPolicyId(),
+                cipherService.decryptData(entity.getCMIPolicy()),
+                cipherService.decryptData(entity.getPolicyImage()));
+        dto.setPolicy(policy);
+
+        return dto;
     }
 }

@@ -1,9 +1,6 @@
 package com.example.TravelAgencyServer.service;
 
-import com.example.TravelAgencyServer.api.client.ClientMappers;
-import com.example.TravelAgencyServer.api.clientPassport.ClientPassportMapper;
 import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRq;
-import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRs;
 import com.example.TravelAgencyServer.entity.client.ClientPassportEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientPassportRepository;
@@ -11,15 +8,11 @@ import com.example.TravelAgencyServer.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ClientPassportService {
     @Autowired
     private ClientPassportRepository repository;
 
-    @Autowired
-    private ClientPassportMapper mapper;
 
     /*@Autowired
     private ClientMappers clientMappers;*/
@@ -47,10 +40,14 @@ public class ClientPassportService {
     }*/
     
     public ClientPassportEntity create(ClientPassportRq dto) {
-        var entity = mapper.RqToEntity(dto, cipherService);
         var client = clientRepository.findById(dto.clientId());
         if (client.isPresent()) {
-            entity.setClient(client.get());
+            var entity = new ClientPassportEntity(
+                    client.get(),
+                    cipherService.encryptData(dto.series()),
+                    cipherService.encryptData(dto.numbers()),
+                    cipherService.encryptData(dto.image())
+            );
             return repository.save(entity);
         }
         throw new EntityNotExistsException(dto.clientId(), "При создании пасспорта клиент под id е существует");

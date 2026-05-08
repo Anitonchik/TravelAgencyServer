@@ -65,4 +65,8 @@ public class ManagerService {
         repository.findById(id).ifPresent(clientEntity -> repository.delete(clientEntity));
         return repository.existsById(id);
     }
+
+    public ManagerRs EntityToRs(ManagerEntity entity) {
+        return mapper.EntityToRs(entity);
+    }
 }

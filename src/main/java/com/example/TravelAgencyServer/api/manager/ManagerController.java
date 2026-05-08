@@ -20,7 +20,7 @@ public class ManagerController {
         return service.getAll();
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("{managerId}")
     public ManagerRs get(@PathVariable Long userId){
         return service.getById(userId);
     }
@@ -30,12 +30,12 @@ public class ManagerController {
         return service.create(dto);
     }
 
-    @PutMapping("{userId}")
+    @PutMapping("{managerId}")
     public ManagerRs update(@RequestBody ManagerRq dto, @PathVariable Long userId) {
         return service.update(dto, userId);
     }
 
-    @DeleteMapping("{userId}")
+    @DeleteMapping("{managerId}")
     public boolean delete(@PathVariable Long userId) {
         return service.delete(userId);
     }

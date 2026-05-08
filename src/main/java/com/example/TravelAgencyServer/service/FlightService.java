@@ -3,7 +3,6 @@ package com.example.TravelAgencyServer.service;
 import com.example.TravelAgencyServer.api.flight.FlightMapper;
 import com.example.TravelAgencyServer.api.flight.FlightRq;
 import com.example.TravelAgencyServer.api.flight.FlightRs;
-import com.example.TravelAgencyServer.api.hotel.HotelRq;
 import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.FlightRepository;
@@ -28,7 +27,7 @@ public class FlightService {
             return entity.get();
         }
         else {
-            throw new EntityNotExistsException(id, "Отеля не существует");
+            throw new EntityNotExistsException(id, "Полета не существует");
         }
     }
 
@@ -39,13 +38,13 @@ public class FlightService {
             return mapper.EntityToRs(entity.get());
         }
         else {
-            throw new EntityNotExistsException(id, "Отеля не существует");
+            throw new EntityNotExistsException(id, "Полета не существует");
         }
     }
 
     @Transactional(readOnly = true)
     public List<FlightRs> getAll() {
-        return mapper.ListEntitiesToListRq(repository.findAll());
+        return mapper.ListEntitiesToListRs(repository.findAll());
     }
 
     @Transactional

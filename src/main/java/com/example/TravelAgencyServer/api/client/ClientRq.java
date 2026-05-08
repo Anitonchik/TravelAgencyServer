@@ -37,17 +37,21 @@ public record ClientRq (
         @Size (max = 2048, message = "Описание должно быть не больше 2048 символов")
         String preferenceDescription,
 
-
-
+        @NotBlank
+        @Size (min = 4, max = 4)
         String passportSeries,
 
+        @NotBlank
+        @Size (min = 6, max = 6)
         String passportNumbers,
 
+        @NotBlank
         String passportImage,
 
-
-
+        @NotBlank
+        @Size (min = 16, max = 16)
         String policy,
 
+        @NotBlank
         String policyImage) {
 }

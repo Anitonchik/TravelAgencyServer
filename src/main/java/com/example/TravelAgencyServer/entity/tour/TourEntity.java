@@ -38,8 +38,10 @@ public class TourEntity {
     private Boolean isTransferExists;
     @Column(nullable = false)
     private Boolean isInsurancesExists;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TourType tourType;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TourIntensity tourIntensity;
 

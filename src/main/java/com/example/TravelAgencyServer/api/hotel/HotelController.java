@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping(Constants.API_URL + HotelController.URL)
 public class HotelController {
-    static final String URL = "hotel";
+    static final String URL = "/hotel";
 
     @Autowired
     private HotelService service;

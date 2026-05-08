@@ -1,5 +1,15 @@
 package com.example.TravelAgencyServer.api.clientPassport;
 
-import com.example.TravelAgencyServer.api.client.ClientRs;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public record ClientPassportRs (Long id, String series, String numbers, String image) {}
+@AllArgsConstructor
+@Getter
+@Setter
+public class ClientPassportRs {
+    private Long id;
+    private String series;
+    private String numbers;
+    private String image;
+}

@@ -26,16 +26,18 @@ public class ManagerEntity {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, unique = true)
-    private String phone;
+    private String login;
+    @Column(nullable = false)
+    private String password;
 
 
-
-    public ManagerEntity(String firstName, String lastName, String surName, Date birthDate, String email, String phone) {
+    public ManagerEntity(String firstName, String lastName, String surName, Date birthDate, String email, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.surName = surName;
         this.birthDate = birthDate;
         this.email = email;
-        this.phone = phone;
+        this.login = login;
+        this.password = password;
     }
 }

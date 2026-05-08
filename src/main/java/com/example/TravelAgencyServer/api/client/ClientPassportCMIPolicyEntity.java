@@ -1,13 +1,13 @@
 package com.example.TravelAgencyServer.api.client;
 
 import com.example.TravelAgencyServer.entity.client.CMIPolicyEntity;
-import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.entity.client.ClientPassportEntity;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class ClientPassportCMIPolicyEntity {
 
     private String surName;
 
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     private byte[] snils;
 
@@ -32,19 +32,18 @@ public class ClientPassportCMIPolicyEntity {
 
     private String preferenceDescription;
 
-    private ClientPassportEntity passport;
+    private Long passportId;
 
-    private CMIPolicyEntity policy;
+    private byte[] passportSeries;
 
-    /*public ClientPassportCMIPolicyEntity (ClientEntity clientEntity,
-                                          ClientPassportEntity passport, CMIPolicyEntity policy){
-        this.id = clientEntity.getId();
-        this.firstName = clientEntity.getFirstName();
-        this.lastName = clientEntity.getLastName();
-        this.surName = clientEntity.getSurName();
-        this.birthDate = clientEntity.getBirthDate();
-        this.email = clientEntity.getEmail();
-        this.phone = clientEntity.getPhone();
-        this.preferenceDescription = clientEntity.getPreferenceDescription();
-    }*/
+    private byte[] passportNumbers;
+
+    private byte[] passportImage;
+
+
+    private Long policyId;
+
+    private byte[] CMIPolicy;
+
+    private byte[] policyImage;
 }

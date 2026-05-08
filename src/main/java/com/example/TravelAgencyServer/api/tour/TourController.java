@@ -24,19 +24,4 @@ public class TourController {
     public TourRs get(@PathVariable Long tourId){
         return service.getById(tourId);
     }
-
-    @PostMapping
-    public TourRs create(@RequestBody TourRq dto) {
-        return service.create(dto);
-    }
-
-    @PutMapping("{tourId}")
-    public TourRs update(@RequestBody TourRq dto, @PathVariable Long tourId) {
-        return service.update(dto, tourId);
-    }
-
-    @DeleteMapping("{tourId}")
-    public boolean delete(@PathVariable Long tourId) {
-        return service.delete(tourId);
-    }
 }
