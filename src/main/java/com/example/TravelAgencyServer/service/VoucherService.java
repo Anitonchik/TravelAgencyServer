@@ -2,6 +2,7 @@ package com.example.TravelAgencyServer.service;
 
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
 import com.example.TravelAgencyServer.entity.reservation.VoucherInfoDecrypted;
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -36,10 +37,18 @@ public class VoucherService {
 
         Document document = new Document(pdf);
 
-        PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-        PdfFont fontBold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+        PdfFont font = PdfFontFactory.createFont(
+                "fonts/Aptos.ttf",
+                PdfEncodings.IDENTITY_H,
+                PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+        );
 
-        // ---------- 1. Заголовок ----------
+        PdfFont fontBold = PdfFontFactory.createFont(
+                "fonts/Aptos-Bold.ttf",
+                PdfEncodings.IDENTITY_H,
+                PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED
+        );
+
         document.add(
                 new Paragraph("Информация о туроператоре")
                         .setFont(fontBold)
@@ -47,7 +56,7 @@ public class VoucherService {
                         .setTextAlignment(TextAlignment.CENTER)
         );
 
-        // ---------- 2. Основная таблица ----------
+
         float[] columns = {100, 100, 150, 100, 100};
         Table table = new Table(columns).setWidth(550);
 
@@ -70,21 +79,18 @@ public class VoucherService {
         table.addCell(normal(voucherInfo.getClientLastName() + " " +
                 voucherInfo.getClientFirstName() + " " + voucherInfo.getClientSurName(), font, 3));
 
-        // ---------- Паспорт ----------
         table.addCell(bold("Паспорт", fontBold));
         table.addCell(bold("Серия", fontBold));
         table.addCell(normal(voucherInfo.getClientPassportSeries(), font));
         table.addCell(bold("Номер", fontBold));
         table.addCell(normal(voucherInfo.getClientPassportNumbers(), font));
 
-        // ---------- Отель ----------
         table.addCell(bold("Отель", fontBold, 2));
         table.addCell(normal(voucherInfo.getHotelName(), font, 3));
 
         table.addCell(bold("Адрес отеля", fontBold, 2));
         table.addCell(normal(voucherInfo.getHotelLocation(), font, 3));
 
-        // ---------- Авиабилеты ----------
         table.addCell(bold("Авиабилеты", fontBold, 5));
 
         table.addCell(bold("Авиакомпания", fontBold));
@@ -112,7 +118,6 @@ public class VoucherService {
         table.addCell(bold("Время", fontBold));
         table.addCell(normal(voucherInfo.getFlightToDate().format(DateTimeFormatter.ofPattern("HH:mm")), font));
 
-        // ---------- Трансфер ----------
         if (indicateTransfer) {
             table.addCell(bold("Трансфер", fontBold));
             table.addCell(normal("+", font));
@@ -121,7 +126,6 @@ public class VoucherService {
             table.addCell(normal("", font));
         }
 
-        // ---------- Страховка ----------
         if (indicateInsurance) {
             table.addCell(bold("Страховка", fontBold));
             table.addCell(normal("+", font));
@@ -130,45 +134,50 @@ public class VoucherService {
             table.addCell(normal("", font));
         }
 
+
+        table.addCell(normal("Цены, руб.", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+
+        table.addCell(costNormal("Тур", font));
+        table.addCell(costNormal(String.valueOf(voucherInfo.getTourPrice()), font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+
+        table.addCell(costNormal("Отель", font));
+        table.addCell(costNormal(String.valueOf(voucherInfo.getHotelPrice()), font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+
+        table.addCell(costNormal("Перелет 1", font));
+        table.addCell(costNormal(String.valueOf(voucherInfo.getFlightToPrice()), font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+
+        table.addCell(costNormal("Перелет 2", font));
+        table.addCell(costNormal(String.valueOf(voucherInfo.getFlightFromPrice()), font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(normal("", font));
+        table.addCell(costBold("Итого", fontBold));
+        table.addCell(costBold(String.valueOf(voucherInfo.getFinalPrice()), fontBold));
+
+
         document.add(table);
-
-        // ---------- 3. Стоимость ----------
-        float[] costCols = {150, 100, 150, 100};
-        Table costTable = new Table(costCols).setWidth(550);
-
-        costTable.addCell(costNormal("Тур", font));
-        costTable.addCell(costNormal(String.valueOf(voucherInfo.getTourPrice()), font));
-        costTable.addCell(normal("", font));
-        costTable.addCell(normal("", font));
-
-        costTable.addCell(costNormal("Отель", font));
-        costTable.addCell(costNormal(String.valueOf(voucherInfo.getHotelPrice()), font));
-        costTable.addCell(normal("", font));
-        costTable.addCell(normal("", font));
-
-        costTable.addCell(costNormal("Перелет 1", font));
-        costTable.addCell(costNormal(String.valueOf(voucherInfo.getFlightToPrice()), font));
-        costTable.addCell(normal("", font));
-        costTable.addCell(normal("", font));
-
-        costTable.addCell(costNormal("Перелет 2", font));
-        costTable.addCell(costNormal(String.valueOf(voucherInfo.getFlightFromPrice()), font));
-        costTable.addCell(normal("", font));
-        costTable.addCell(normal("", font));
-
-        costTable.addCell(normal("", font));
-        costTable.addCell(normal("", font));
-        costTable.addCell(costBold("Итого", fontBold));
-        costTable.addCell(costBold(String.valueOf(voucherInfo.getFinalPrice()), fontBold));
-
-
-        document.add(costTable);
 
         document.close();
         return baos.toByteArray();
     }
 
-    // ---------- Вспомогательные методы ----------
     private com.itextpdf.layout.element.Cell bold(String text, PdfFont font) {
         return new com.itextpdf.layout.element.Cell()
                 .add(new Paragraph(text).setFont(font).setFontSize(14));
