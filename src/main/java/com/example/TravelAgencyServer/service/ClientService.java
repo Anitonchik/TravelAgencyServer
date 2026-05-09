@@ -3,7 +3,7 @@ package com.example.TravelAgencyServer.service;
 import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRq;
 import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRs;
 import com.example.TravelAgencyServer.api.client.ClientMapper;
-import com.example.TravelAgencyServer.api.client.ClientPassportCMIPolicyEntity;
+import com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy;
 import com.example.TravelAgencyServer.api.client.ClientRq;
 import com.example.TravelAgencyServer.api.client.ClientRs;
 import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRq;
@@ -117,7 +117,7 @@ public class ClientService {
         return mapper.ClientEntityToClientRs(entity);
     }
 
-    private ClientRs decryptData(ClientPassportCMIPolicyEntity entity) {
+    private ClientRs decryptData(ClientPassportCMIPolicy entity) {
         var dto = mapper.ClientPassportCMIPolicyEntityToClientRs(entity);
         dto.setSnils(cipherService.decryptData(entity.getSnils()));
 

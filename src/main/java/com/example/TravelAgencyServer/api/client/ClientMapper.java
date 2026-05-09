@@ -1,6 +1,7 @@
 package com.example.TravelAgencyServer.api.client;
 
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
+import com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public interface ClientMapper {
             @Mapping(target = "policy.CMIPolicy", ignore = true),
             @Mapping(target = "policy.image", ignore = true),
     })
-    ClientRs ClientPassportCMIPolicyEntityToClientRs(ClientPassportCMIPolicyEntity clientEntity);
+    ClientRs ClientPassportCMIPolicyEntityToClientRs(ClientPassportCMIPolicy clientEntity);
 
-    List<ClientRs> ClientEntityListToClientRsList(List<ClientPassportCMIPolicyEntity> clientEntities);
+    List<ClientRs> ClientEntityListToClientRsList(List<ClientPassportCMIPolicy> clientEntities);
 
 
     @Mappings({

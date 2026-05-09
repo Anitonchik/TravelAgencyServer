@@ -36,8 +36,6 @@ public class TourEntity {
     private Date dateTo;
     @Column(nullable = false)
     private Boolean isTransferExists;
-    @Column(nullable = false)
-    private Boolean isInsurancesExists;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TourType tourType;
@@ -58,7 +56,7 @@ public class TourEntity {
     private List<HotelEntity> hotels;
 
     public TourEntity(String name, String direction, String description, String duration, int numberOfSeats, Double price,
-                      Date dateFrom, Date dateTo, Boolean isTransferExists, Boolean isInsurancesExists, TourType tourType,
+                      Date dateFrom, Date dateTo, Boolean isTransferExists, TourType tourType,
                       TourIntensity tourIntensity, List<FlightEntity> flights, List<HotelEntity> hotels) {
         this.name = name;
         this.direction = direction;
@@ -69,7 +67,6 @@ public class TourEntity {
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.isTransferExists = isTransferExists;
-        this.isInsurancesExists = isInsurancesExists;
         this.tourType = tourType;
         this.tourIntensity = tourIntensity;
         this.flights = flights;

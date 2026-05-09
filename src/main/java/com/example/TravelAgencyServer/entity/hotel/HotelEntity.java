@@ -25,11 +25,11 @@ public class HotelEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    /*@Column(nullable = false)
     private int durationOfStay;
 
     @Column(nullable = false)
-    private int numberOfPlacesInTheRoom;
+    private int numberOfPlacesInTheRoom;*/
 
     @Column(nullable = false)
     private Double price;
@@ -47,11 +47,11 @@ public class HotelEntity {
     @OneToMany(mappedBy = "hotel", fetch = FetchType.LAZY)
     private List<ReservationEntity> reservations = new ArrayList<>();
 
-    public HotelEntity(String name, int durationOfStay, int numberOfPlacesInTheRoom, Double price,
+    public HotelEntity(String name, /*int durationOfStay, int numberOfPlacesInTheRoom,*/ Double price,
                        String location, String image, FoodType foodType) {
         this.name = name;
-        this.durationOfStay = durationOfStay;
-        this.numberOfPlacesInTheRoom = numberOfPlacesInTheRoom;
+        /*this.durationOfStay = durationOfStay;
+        this.numberOfPlacesInTheRoom = numberOfPlacesInTheRoom;*/
         this.price = price;
         this.location = location;
         this.image = image;

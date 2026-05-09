@@ -1,19 +1,15 @@
-package com.example.TravelAgencyServer.api.client;
+package com.example.TravelAgencyServer.entity.client;
 
-import com.example.TravelAgencyServer.entity.client.CMIPolicyEntity;
-import com.example.TravelAgencyServer.entity.client.ClientPassportEntity;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class ClientPassportCMIPolicyEntity {
+public class ClientPassportCMIPolicy {
     private Long id;
 
     private String firstName;

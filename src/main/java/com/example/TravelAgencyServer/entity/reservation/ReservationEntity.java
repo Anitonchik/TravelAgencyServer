@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -20,6 +21,9 @@ public class ReservationEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private LocalDateTime reservationDate;
 
     @ManyToOne
     @JoinColumn(name = "manager_id", nullable = false)
@@ -42,7 +46,7 @@ public class ReservationEntity {
     private FlightEntity flightFrom;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id")
     private HotelEntity hotel;
 
     @Enumerated(EnumType.STRING)
@@ -53,9 +57,17 @@ public class ReservationEntity {
     @Column
     private PaymentType paymentType;
 
-    public ReservationEntity(ManagerEntity manager, ClientEntity client, TourEntity tour,
+    @Enumerated(EnumType.STRING)
+    @Column
+    private InsuranceType insuranceType;
+
+    @Column
+    private Double price;
+
+    public ReservationEntity(LocalDateTime reservationDate, ManagerEntity manager, ClientEntity client, TourEntity tour,
                              FlightEntity flightTo, FlightEntity flightFrom, HotelEntity hotel,
-                             Status status, PaymentType paymentType) {
+                             Status status, PaymentType paymentType, InsuranceType insuranceType, Double price) {
+        this.reservationDate = reservationDate;
         this.manager = manager;
         this.client = client;
         this.tour = tour;
@@ -64,6 +76,8 @@ public class ReservationEntity {
         this.hotel = hotel;
         this.status = status;
         this.paymentType = paymentType;
+        this.insuranceType = insuranceType;
+        this.price = price;
     }
 }
 

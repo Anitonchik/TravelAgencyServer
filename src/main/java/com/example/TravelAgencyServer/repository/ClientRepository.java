@@ -1,7 +1,6 @@
 package com.example.TravelAgencyServer.repository;
 
-import com.example.TravelAgencyServer.api.client.ClientPassportCMIPolicyEntity;
-import com.example.TravelAgencyServer.api.client.ClientRs;
+import com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy;
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,7 +37,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
       AND c.is_deleted = false
     LIMIT 1
 """, nativeQuery = true)
-    Optional<ClientPassportCMIPolicyEntity> getClientPassportPolicy(Long id);
+    Optional<ClientPassportCMIPolicy> getClientPassportPolicy(Long id);
 
     @Query(value = """
     SELECT DISTINCT c.id,
@@ -64,5 +63,5 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
       AND cmi.is_active = true
       AND c.is_deleted = false
 """, nativeQuery = true)
-    List<ClientPassportCMIPolicyEntity> getAllClientPassportPolicy();
+    List<ClientPassportCMIPolicy> getAllClientPassportPolicy();
 }

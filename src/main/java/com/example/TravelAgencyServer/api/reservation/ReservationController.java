@@ -3,6 +3,7 @@ package com.example.TravelAgencyServer.api.reservation;
 import com.example.TravelAgencyServer.api.Constants;
 import com.example.TravelAgencyServer.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +39,13 @@ public class ReservationController {
     @DeleteMapping("{reservationId}")
     public boolean delete(@PathVariable Long reservationId) {
         return service.delete(reservationId);
+    }
+
+    @PostMapping("/voucher")
+    public ResponseEntity<byte[]> getVoucher(@RequestBody VoucherRq dto) throws Exception {
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "attachment; filename=voucher.pdf")
+                .body(service.generateVoucher(dto.reservationId(), dto.indicateTransfer(), dto.indicateInsurance()));
     }
 }

@@ -5,6 +5,7 @@ import com.example.TravelAgencyServer.api.flight.FlightRq;
 import com.example.TravelAgencyServer.api.flight.FlightRs;
 import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
+import com.example.TravelAgencyServer.exceptions.NoPlacesException;
 import com.example.TravelAgencyServer.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,18 @@ public class FlightService {
         var entity = findById(id);
         var updatedEntity = mapper.updateEntity(dto, entity);
         return mapper.EntityToRs(updatedEntity);
+    }
+
+    public FlightEntity updateCountOfSeats(Long id) {
+        var entity = findById(id);
+        if (entity.getCountOfSeats() > 0) {
+            entity.setCountOfSeats(entity.getCountOfSeats() - 1);
+            repository.save(entity);
+            return entity;
+        }
+        else {
+            throw new NoPlacesException(id);
+        }
     }
 
     @Transactional

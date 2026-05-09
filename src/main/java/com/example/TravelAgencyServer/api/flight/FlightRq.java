@@ -13,5 +13,7 @@ public record FlightRq (
         @NotBlank
         String locationTo,
         @NotBlank
-        Date date) {
+        Date date,
+        @NotBlank
+        int countOfSeats) {
 }

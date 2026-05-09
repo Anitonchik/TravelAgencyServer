@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping(Constants.API_URL + ManagerController.URL)
 public class ManagerController {
-    static final String URL = "/user";
+    static final String URL = "/manager";
 
     @Autowired
     private ManagerService service;
