@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение бронирования</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .message {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .footer {
+            background-color: #ecf0f1;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Travel Agency</h1>
+        <p>Ваш надежный партнер в путешествиях</p>
+    </div>
+
+    <div class="content">
+        <div class="greeting">
+            <strong>Здравствуйте, <span th:text="${lastName}">Фамилия</span>
+                <span th:text="${firstName}">Имя</span>
+                <span th:text="${surName}">Отчество</span>!</strong>
+        </div>
+
+        <div class="message">
+            <p style="font-size: 16px; margin: 0;">
+                <strong>Ваше бронирование подтверждено!</strong>
+            </p>
+        </div>
+
+        <p>
+            Ваш ваучер прикреплен к этому письму в виде PDF-файла.
+            Пожалуйста, сохраните его и распечатайте при необходимости.
+        </p>
+
+        <p>
+            По всем вопросам обращайтесь в нашу службу поддержки.
+        </p>
+
+        <p style="margin-top: 30px;">
+            С уважением,<br>
+            <strong>Команда Travel Agency</strong>
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>Travel Agency. Все права защищены.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.itextpdf:layout:7.2.5'
 
     implementation "org.springframework.boot:spring-boot-starter-mail:4.0.5"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
 
 
 }

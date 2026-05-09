@@ -1,9 +1,7 @@
-package com.example.TravelAgencyServer.service;
+package com.example.TravelAgencyServer.service.EmailService;
 
-import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
 import com.example.TravelAgencyServer.entity.reservation.VoucherInfoDecrypted;
 import com.itextpdf.io.font.PdfEncodings;
-import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
@@ -15,7 +13,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
-import java.io.*;
 
 
 import java.time.LocalDateTime;

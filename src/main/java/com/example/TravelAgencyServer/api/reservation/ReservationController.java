@@ -3,7 +3,9 @@ package com.example.TravelAgencyServer.api.reservation;
 import com.example.TravelAgencyServer.api.Constants;
 import com.example.TravelAgencyServer.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,5 +49,15 @@ public class ReservationController {
                 .header("Content-Type", "application/pdf")
                 .header("Content-Disposition", "attachment; filename=voucher.pdf")
                 .body(service.generateVoucher(dto.reservationId(), dto.indicateTransfer(), dto.indicateInsurance()));
+    }
+
+    @GetMapping("voucher/send/{reservationId}")
+    public @ResponseBody ResponseEntity sendSimpleEmail(@PathVariable Long reservationId) {
+        try {
+            service.sendVoucherToEmail(reservationId);
+        } catch (MailException mailException) {
+            return new ResponseEntity<>("Unable to send email", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Please check your inbox", HttpStatus.OK);
     }
 }

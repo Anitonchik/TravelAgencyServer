@@ -1,6 +1,5 @@
 package com.example.TravelAgencyServer.service;
 
-import com.example.TravelAgencyServer.api.flight.FlightRq;
 import com.example.TravelAgencyServer.api.reservation.ReservationMapper;
 import com.example.TravelAgencyServer.api.reservation.ReservationRq;
 import com.example.TravelAgencyServer.api.reservation.ReservationRs;
@@ -8,15 +7,18 @@ import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.entity.hotel.HotelEntity;
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
 import com.example.TravelAgencyServer.entity.reservation.Status;
+import com.example.TravelAgencyServer.entity.reservation.VoucherEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ReservationRepository;
+import com.example.TravelAgencyServer.repository.VoucherRepository;
+import com.example.TravelAgencyServer.service.EmailService.EmailService;
+import com.example.TravelAgencyServer.service.EmailService.VoucherService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,6 +49,12 @@ public class ReservationService {
 
     @Autowired
     private VoucherService voucherService;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public ReservationEntity findById(Long id) {
@@ -128,18 +136,42 @@ public class ReservationService {
 
     @Transactional
     public byte[] generateVoucher(Long reservationId, boolean indicateTransfer, boolean indicateInsurance) throws Exception {
-        var voucherInfoEncrypted = repository.getVoucherInfo(reservationId);
-        if (voucherInfoEncrypted.isPresent()) {
-            String passportNumbers = cipherService.decryptData(voucherInfoEncrypted.get().getClientPassportNumbers());
-            String passportSeries = cipherService.decryptData(voucherInfoEncrypted.get().getClientPassportSeries());
-
-            var voucherInfoDecrypted = mapper.EncryptedToDecrypted(voucherInfoEncrypted.get(), passportSeries, passportNumbers);
-
-            return voucherService.generateReservationPdf(indicateTransfer,
-                    indicateInsurance, voucherInfoDecrypted, LocalDateTime.now());
+        var savedVoucher = voucherRepository.findByReservation_Id(reservationId);
+        if (savedVoucher.isPresent()) {
+            return savedVoucher.get().getVoucher();
         }
         else {
-            throw new EntityNotExistsException(reservationId, "При создании ваучера бронирования не существует");
+            var voucherInfoEncrypted = repository.getVoucherInfo(reservationId);
+            if (voucherInfoEncrypted.isPresent()) {
+                String passportNumbers = cipherService.decryptData(voucherInfoEncrypted.get().getClientPassportNumbers());
+                String passportSeries = cipherService.decryptData(voucherInfoEncrypted.get().getClientPassportSeries());
+
+                var voucherInfoDecrypted = mapper.EncryptedToDecrypted(voucherInfoEncrypted.get(), passportSeries, passportNumbers);
+
+                var voucher = voucherService.generateReservationPdf(indicateTransfer,
+                        indicateInsurance, voucherInfoDecrypted, LocalDateTime.now());
+                SaveVoucher(reservationId, voucher);
+                return voucher;
+            } else {
+                throw new EntityNotExistsException(reservationId, "При создании ваучера бронирования не существует");
+            }
         }
+    }
+
+    public void sendVoucherToEmail(Long reservationId) {
+        var newVoucher = voucherRepository.findByReservation_Id(reservationId);
+        newVoucher.ifPresent(voucherEntity -> {
+            try {
+                emailService.sendVoucherToEmail(voucherEntity);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Transactional
+    private void SaveVoucher(Long reservationId, byte[] voucher){
+        var reservation = findById(reservationId);
+        voucherRepository.save(new VoucherEntity(reservation, voucher));
     }
 }
