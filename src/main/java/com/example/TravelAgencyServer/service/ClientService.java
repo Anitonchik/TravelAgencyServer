@@ -12,6 +12,8 @@ import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,13 +61,15 @@ public class ClientService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClientRs> getAll() {
-        var entities = repository.getAllClientPassportPolicy();
-        List<ClientRs> clients = new ArrayList<>();
-        for (var entity : entities) {
-            clients.add(decryptData(entity));
-        }
-        return clients;
+    public Page<ClientRs> getAll(int pageNumber, int pageSize) {
+        return repository.getAllClientPassportPolicy(PageRequest.of(pageNumber, pageSize))
+                .map(this::decryptData);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ClientRs> getByName(String name, int pageNumber, int pageSize) {
+        return repository.getAllClientPassportPolicyByName(name, PageRequest.of(pageNumber, pageSize))
+                .map(this::decryptData);
     }
 
     @Transactional

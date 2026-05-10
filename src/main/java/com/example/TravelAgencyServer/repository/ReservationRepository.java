@@ -1,10 +1,14 @@
 package com.example.TravelAgencyServer.repository;
 
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
+import com.example.TravelAgencyServer.entity.reservation.Status;
 import com.example.TravelAgencyServer.entity.reservation.VoucherInfoEncrypted;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
@@ -50,4 +54,14 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
     WHERE r.id = :reservationId
     """, nativeQuery = true)
     Optional<VoucherInfoEncrypted> getVoucherInfo(Long reservationId);
+
+    Page<ReservationEntity> findByReservationDateBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+    Page<ReservationEntity> findByClient_FirstNameContainingIgnoreCaseOrClient_LastNameContainingIgnoreCaseOrClient_SurNameContainingIgnoreCase
+            (String firstNamePart, String lastNamePart, String surNamePart, Pageable pageable);
+    Page<ReservationEntity> findByClient_Id(Long clientId, Pageable pageable);
+
+    Page<ReservationEntity> findByStatus(Status status, Pageable pageable);
+
+
 }

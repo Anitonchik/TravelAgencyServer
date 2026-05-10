@@ -15,6 +15,9 @@ import com.example.TravelAgencyServer.service.EmailService.EmailService;
 import com.example.TravelAgencyServer.service.EmailService.VoucherService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,9 +82,33 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReservationRs> getAll() {
-        return mapper.ListEntitiesToListRq(repository.findAll());
+    public Page<ReservationRs> getAll(int pageNumber, int pageSize) {
+        return repository.findAll(PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
     }
+
+
+    @Transactional
+    public Page<ReservationRs> getByDates(LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize){
+        return repository.findByReservationDateBetween(startDate, endDate, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+    }
+
+
+    @Transactional
+    public Page<ReservationRs> getByClientId(Long clientId, int pageNumber, int pageSize){
+        return repository.findByClient_Id(clientId, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+    }
+
+    @Transactional
+    public Page<ReservationRs> getByClientName(String name, int pageNumber, int pageSize){
+        return repository.findByClient_FirstNameContainingIgnoreCaseOrClient_LastNameContainingIgnoreCaseOrClient_SurNameContainingIgnoreCase
+                (name, name, name, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+    }
+
+    @Transactional
+    public Page<ReservationRs> getByStatus(Status status, int pageNumber, int pageSize){
+        return repository.findByStatus(status, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+    }
+
 
     @Transactional
     public ReservationRs create(ReservationRq dto) {
@@ -126,12 +153,6 @@ public class ReservationService {
         var price = tour.getPrice() + flightFrom.getPrice() + flightTo.getPrice() + hotel.getPrice();
         var updatedEntity = mapper.updateEntity(dto, entity, price, manager, client, tour, flightFrom, flightTo, hotel);
         return mapper.EntityToRs(updatedEntity);
-    }
-
-    @Transactional
-    public boolean delete(Long id){
-        repository.findById(id).ifPresent(clientEntity -> repository.delete(clientEntity));
-        return repository.existsById(id);
     }
 
     @Transactional

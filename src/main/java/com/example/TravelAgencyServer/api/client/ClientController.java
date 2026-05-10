@@ -2,7 +2,10 @@ package com.example.TravelAgencyServer.api.client;
 
 import com.example.TravelAgencyServer.api.Constants;
 import com.example.TravelAgencyServer.service.ClientService;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +19,15 @@ public class ClientController {
     private ClientService service;
 
     @GetMapping
-    public List<ClientRs> getAll() {
-        return service.getAll();
+    public Page<ClientRs> getAll(@RequestParam(defaultValue = "0") @Min(0) int pageNumber,
+                                 @RequestParam(defaultValue = "15") @Min(1) int pageSize) {
+        return service.getAll(pageNumber, pageSize);
+    }
+
+    public Page<ClientRs> getByName(@RequestParam String name,
+                                    @RequestParam(defaultValue = "0") @Min(0) int pageNumber,
+                                    @RequestParam(defaultValue = "15") @Min(1) int pageSize) {
+        return service.getByName(name, pageNumber, pageSize);
     }
 
     @GetMapping("{clientId}")

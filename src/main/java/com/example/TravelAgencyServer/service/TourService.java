@@ -13,9 +13,12 @@ import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.TourRepository;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,17 +60,31 @@ public class TourService {
     }
 
     @Transactional(readOnly = true)
-    public List<TourRs> getAll() {
-        var entities = repository.findAll();
-        List<TourRs> tours = new ArrayList<>();
-        for (var entity : entities) {
-            tours.add(mapTour(entity));
-        }
-        return tours;
+    public Page<TourRs> getAll(int pageNumber, int pageSize) {
+        return repository.findAll(PageRequest.of(pageNumber, pageSize)).map(this::mapTour);
     }
 
-    public TourMainInfoRs entityToRs(TourEntity entity) {
-        return mapper.EntityToRs(entity);
+    @Transactional(readOnly = true)
+    public Page<TourRs> getByDirection(String direction, int pageNumber, int pageSize) {
+        return repository.findByDirectionContainingIgnoreCase(direction, PageRequest.of(pageNumber, pageSize))
+                .map(this::mapTour);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TourRs> getByDates(LocalDateTime dateFrom, LocalDateTime dateTo, int pageNumber, int pageSize) {
+        return repository.findByDateFromAndDateTo(dateFrom, dateTo, PageRequest.of(pageNumber, pageSize)).map(this::mapTour);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TourRs> getByHotel(String hotelName, int pageNumber, int pageSize) {
+        return repository
+                .findByHotels_NameContainingIgnoreCase(hotelName, PageRequest.of(pageNumber, pageSize))
+                .map(this::mapTour);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TourRs> getByPrice(Double priceStart, Double priceEnd, int pageNumber, int pageSize) {
+        return repository.findByPriceBetween(priceStart, priceEnd, PageRequest.of(pageNumber, pageSize)).map(this::mapTour);
     }
 
     public TourRs mapTour(TourEntity entity) {
