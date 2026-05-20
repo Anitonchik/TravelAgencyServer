@@ -2,12 +2,11 @@ package com.example.TravelAgencyServer.api.reservation;
 
 import com.example.TravelAgencyServer.entity.reservation.InsuranceType;
 import com.example.TravelAgencyServer.entity.reservation.PaymentType;
-import com.example.TravelAgencyServer.entity.reservation.Status;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
-public record ReservationRq(
+public record CancelInProcessReservationRq(
         @NotBlank
         Long id,
         @NotBlank
@@ -18,19 +17,11 @@ public record ReservationRq(
         Long managerId,
         @NotBlank
         Long clientId,
-        @NotBlank
         Long tourId,
-        @NotBlank
         Long flightToId,
-        @NotBlank
         Long flightFromId,
-        @NotBlank
         Long hotelId,
-        @NotBlank
         boolean indicateTransfer,
-        @NotBlank
         boolean indicateInsurance,
-        @NotBlank
         PaymentType paymentType,
-        @NotBlank
-        InsuranceType insuranceType) {}
+        InsuranceType insuranceType) { }

@@ -24,6 +24,7 @@ public class ClientController {
         return service.getAll(pageNumber, pageSize);
     }
 
+    @GetMapping("/byName")
     public Page<ClientRs> getByName(@RequestParam String name,
                                     @RequestParam(defaultValue = "0") @Min(0) int pageNumber,
                                     @RequestParam(defaultValue = "15") @Min(1) int pageSize) {

@@ -56,6 +56,10 @@ public class CMIPolicyService {
         return create(dto);
     }
 
+    public CMIPolicyEntity getByClient(Long clientId) {
+        return repository.findByClient_IdAndIsActiveTrue(clientId).getFirst();
+    }
+
     public boolean delete(Long id){
         var entity = findById(id);
         entity.setActive(false);

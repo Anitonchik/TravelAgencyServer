@@ -1,17 +1,19 @@
 package com.example.TravelAgencyServer.api.manager;
 
 import com.example.TravelAgencyServer.entity.manager.ManagerEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ManagerMapper {
-    @Mapping(target = "id", ignore = true)
-    ManagerEntity RqToEntity(ManagerRq dto);
+    @Mappings({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "password", expression = "java(pswEnc.encode(dto.password()))")
+    })
+
+    ManagerEntity RqToEntity(ManagerRq dto, @Context PasswordEncoder pswEnc);
 
     @Mapping(target = "id", ignore = true)
     ManagerEntity updateEntity(ManagerRq dto, @MappingTarget ManagerEntity entity);

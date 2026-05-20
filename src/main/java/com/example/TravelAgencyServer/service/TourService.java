@@ -31,12 +31,6 @@ public class TourService {
     @Autowired
     private TourMapper mapper;
 
-    @Autowired
-    private FlightMapper flightMapper;
-
-    @Autowired
-    private HotelMapper hotelMapper;
-
     @Transactional
     public TourEntity findById(Long id) {
         var entity = repository.findById(id);

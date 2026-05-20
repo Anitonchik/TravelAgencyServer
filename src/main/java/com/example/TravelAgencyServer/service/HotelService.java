@@ -52,6 +52,7 @@ public class HotelService {
         return mapper.ListEntitiesToListRs(repository.findAll());
     }
 
+
     @Transactional
     public HotelRs create(HotelRq dto) {
         var entity = repository.save(mapper.RqToEntity(dto));

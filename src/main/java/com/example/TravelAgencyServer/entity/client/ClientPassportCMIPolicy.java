@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @Getter
@@ -18,7 +18,7 @@ public class ClientPassportCMIPolicy {
 
     private String surName;
 
-    private LocalDateTime birthDate;
+    private Date birthDate;
 
     private byte[] snils;
 

@@ -59,6 +59,10 @@ public class ClientPassportService {
         repository.save(entity);
         return create(dto);
     }
+
+    public ClientPassportEntity getByClientId(Long clientId){
+        return repository.findByClient_IdAndIsActiveTrue(clientId).getFirst();
+    }
     
     public boolean delete(Long id){
         var entity = findById(id);

@@ -64,10 +64,10 @@ public class ReservationController {
     }
 
     @GetMapping("/search/byClientName")
-    public Page<ReservationRs> getByClientName(@RequestParam String name,
+    public Page<ReservationRs> getByClientName(@RequestParam String clientName,
                                                @RequestParam(defaultValue = "0") @Min(0) int pageNumber,
                                                @RequestParam(defaultValue = "15") @Min(1) int pageSize){
-        return service.getByClientName(name, pageNumber, pageSize);
+        return service.getByClientName(clientName, pageNumber, pageSize);
     }
 
     @GetMapping("/search/byStatus")
@@ -82,20 +82,25 @@ public class ReservationController {
         return service.getById(reservationId);
     }
 
-    @PostMapping
-    public ReservationRs create(@RequestBody ReservationRq dto) {
-        return service.create(dto);
+    @PostMapping("/start")
+    public ReservationRs startReservation(@RequestBody StartReservationRq dto){
+        return service.startReservation(dto);
     }
 
-    @PutMapping("{reservationId}")
-    public ReservationRs update(@RequestBody ReservationRq dto, @PathVariable Long reservationId) {
-        return service.update(dto, reservationId);
+    @PutMapping("/end")
+    public ReservationRs endReservation(@RequestBody ReservationRq dto) {
+        return service.endReservation(dto, Status.CONFIRMED);
     }
 
-    /*@DeleteMapping("{reservationId}")
-    public boolean delete(@PathVariable Long reservationId) {
-        return service.delete(reservationId);
-    }*/
+    @PutMapping("/cancelInProcess")
+    public ReservationRs cancelReservationInProcess(@RequestBody CancelInProcessReservationRq dto) {
+        return service.cancelReservationInProcess(dto);
+    }
+
+    @PutMapping("/cancel")
+    public ReservationRs cancelReservation(@RequestBody ReservationRq dto) {
+        return service.endReservation(dto, Status.CANCELED);
+    }
 
     @PostMapping("/voucher")
     public ResponseEntity<byte[]> getVoucher(@RequestBody VoucherRq dto) throws Exception {
@@ -105,7 +110,7 @@ public class ReservationController {
                 .body(service.generateVoucher(dto.reservationId(), dto.indicateTransfer(), dto.indicateInsurance()));
     }
 
-    @GetMapping("voucher/send/{reservationId}")
+    @GetMapping("/voucher/send/{reservationId}")
     public @ResponseBody ResponseEntity sendSimpleEmail(@PathVariable Long reservationId) {
         try {
             service.sendVoucherToEmail(reservationId);
@@ -113,5 +118,10 @@ public class ReservationController {
             return new ResponseEntity<>("Unable to send email", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Please check your inbox", HttpStatus.OK);
+    }
+
+    @GetMapping("/counts")
+    public ReservationsCountRs getCounts(){
+        return service.getReservationsCountByStatus();
     }
 }

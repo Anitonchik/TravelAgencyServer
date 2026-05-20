@@ -1,7 +1,7 @@
 plugins {
-	id "java"
-	id "org.springframework.boot" version "4.0.1"
-	id "io.spring.dependency-management" version "1.1.7"
+    id "java"
+    id "org.springframework.boot" version "3.4.1"
+    id "io.spring.dependency-management" version "1.1.7"
 }
 
 group = "com.example"
@@ -9,60 +9,67 @@ version = "0.0.1-SNAPSHOT"
 description = "Demo project for Spring Boot"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-    swaggerVersion = "2.2.41"
-    postgresqlVerion = "42.7.7"
-    springBootStarterVersion = "3.5.7"
+    swaggerVersion = "2.2.28"
+    postgresqlVersion = "42.7.7"
     jasyptVersion = "4.0.3"
     lombokVersion = "1.18.30"
     mapstructVersion = "1.6.3"
     lombokMapstructBindingVersion = "0.2.0"
+    jjwtVersion = "0.11.5"
 }
 
 dependencies {
-    // Source: https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
-    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    // Spring Boot Starters (версии управляются Spring Boot)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-security'  // ← ОДИН РАЗ
 
+    // JAXB API
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+    // OpenAPI / Swagger
     implementation "io.swagger.core.v3:swagger-annotations:${swaggerVersion}"
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0"
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
-
-    implementation "org.springframework.boot:spring-boot-starter-webmvc"
-	testImplementation "org.springframework.boot:spring-boot-starter-webmvc-test"
-	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.boot:spring-boot-starter-validation:${springBootStarterVersion}"
-    implementation "org.postgresql:postgresql:${postgresqlVerion}"
+    // Database
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Lombok
-    implementation "org.projectlombok:lombok:${lombokVersion}"
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    // MapStruct
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor  "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 
-    annotationProcessor  "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
-
+    // iText
     implementation 'com.itextpdf:kernel:7.2.5'
     implementation 'com.itextpdf:layout:7.2.5'
 
-    implementation "org.springframework.boot:spring-boot-starter-mail:4.0.5"
-    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    // JWT
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
 
-
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named("test") {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

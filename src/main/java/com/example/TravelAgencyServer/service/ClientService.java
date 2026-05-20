@@ -3,12 +3,14 @@ package com.example.TravelAgencyServer.service;
 import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRq;
 import com.example.TravelAgencyServer.api.CMIPolicy.CMIPolicyRs;
 import com.example.TravelAgencyServer.api.client.ClientMapper;
+import com.example.TravelAgencyServer.entity.client.CMIPolicyEntity;
 import com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy;
 import com.example.TravelAgencyServer.api.client.ClientRq;
 import com.example.TravelAgencyServer.api.client.ClientRs;
 import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRq;
 import com.example.TravelAgencyServer.api.clientPassport.ClientPassportRs;
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
+import com.example.TravelAgencyServer.entity.client.ClientPassportEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClientService {
@@ -86,7 +89,7 @@ public class ClientService {
 
         var newEntity = repository.getClientPassportPolicy(entity.getId());
         if (newEntity.isPresent()) {
-            return mapper.ClientPassportCMIPolicyEntityToClientRs(newEntity.get());
+            return decryptData(newEntity.get());
         }
         throw new EntityNotExistsException(entity.getId(), "Клиента не существует");
     }
@@ -96,11 +99,23 @@ public class ClientService {
         var entity = findById(id);
         entity = mapper.UpdateClientRqToClientEntity(dto, entity);
 
-        var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(), dto.passportNumbers(), dto.policyImage());
-        clientPassportService.update(entity.getId(), passportRq);
+        var passport = clientPassportService.getByClientId(id);
+        var dcrPassport = decryptPassport(passport);
+        if (!Objects.equals(dcrPassport.getSeries(), dto.passportSeries())
+                || !Objects.equals(dcrPassport.getNumbers(), dto.passportNumbers())){
 
-        var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.policy(), dto.policyImage());
-        cmiPolicyService.update(entity.getId(), cmiPolicyRq);
+            var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(),
+                    dto.passportNumbers(), dto.policyImage());
+            clientPassportService.update(entity.getId(), passportRq);
+        }
+
+
+        var cmiPolicy = cmiPolicyService.getByClient(id);
+        var dcrCmiPolicy = decryptPolicy(cmiPolicy);
+        if (!Objects.equals(dcrCmiPolicy.CMIPolicy(), dto.policy())) {
+            var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.policy(), dto.policyImage());
+            cmiPolicyService.update(entity.getId(), cmiPolicyRq);
+        }
 
         var newEntity = repository.getClientPassportPolicy(entity.getId());
         if (newEntity.isPresent()) {
@@ -137,5 +152,18 @@ public class ClientService {
         dto.setPolicy(policy);
 
         return dto;
+    }
+
+    private ClientPassportRs decryptPassport(ClientPassportEntity entity) {
+        return new ClientPassportRs(entity.getId(),
+                cipherService.decryptData(entity.getSeries()),
+                cipherService.decryptData(entity.getNumbers()),
+                cipherService.decryptData(entity.getImage()));
+    }
+
+    private CMIPolicyRs decryptPolicy(CMIPolicyEntity entity) {
+        return new CMIPolicyRs(entity.getId(),
+                cipherService.decryptData(entity.getCMIPolicy()),
+                cipherService.decryptData(entity.getImage()));
     }
 }

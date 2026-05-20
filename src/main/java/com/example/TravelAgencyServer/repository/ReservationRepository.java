@@ -1,5 +1,7 @@
 package com.example.TravelAgencyServer.repository;
 
+import com.example.TravelAgencyServer.api.reservation.ReservationRs;
+import com.example.TravelAgencyServer.api.reservation.ReservationsCountRs;
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
 import com.example.TravelAgencyServer.entity.reservation.Status;
 import com.example.TravelAgencyServer.entity.reservation.VoucherInfoEncrypted;
@@ -63,5 +65,14 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     Page<ReservationEntity> findByStatus(Status status, Pageable pageable);
 
+    @Query(value = """
+            SELECT
+                COUNT(*) AS ALL,
+                COUNT(CASE WHEN status = 'CONFIRMED' THEN 1 END) AS CONFIRMED,
+                COUNT(CASE WHEN status = 'EXPECTATION' THEN 1 END) AS EXPECTATION,
+                COUNT(CASE WHEN status = 'CANCELED' THEN 1 END) AS CANCELED
+            FROM reservation_entity
+        """, nativeQuery = true)
+    Optional<ReservationsCountRs> getCounts();
 
 }

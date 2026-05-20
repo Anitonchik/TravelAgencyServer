@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(Constants.API_URL)
+@RequestMapping(Constants.API_URL + TourController.URL)
 public class TourController {
     static final String URL = "/tour";
 

@@ -4,6 +4,7 @@ import com.example.TravelAgencyServer.api.client.ClientMapper;
 import com.example.TravelAgencyServer.api.hotel.HotelMapper;
 import com.example.TravelAgencyServer.api.manager.ManagerMapper;
 import com.example.TravelAgencyServer.api.tour.TourMapper;
+import com.example.TravelAgencyServer.api.tour.TourRs;
 import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.entity.hotel.HotelEntity;
@@ -36,19 +37,44 @@ public interface ReservationMapper {
     @Mappings ({
             @Mapping(target = "id", ignore = true),
             @Mapping(source = "status", target = "status"),
-            @Mapping(source = "tour.price", target = "price")
+            @Mapping(source = "tour.price", target = "price"),
+            @Mapping(source = "tour", target = "tour")
     })
-    ReservationEntity RqToEntity(ReservationRq dto, Status status, ManagerEntity manager, ClientEntity client, TourEntity tour);
+    ReservationEntity RqToEntity(StartReservationRq dto, Status status, ManagerEntity manager, ClientEntity client, TourEntity tour);
 
     @Mappings ({
             @Mapping(target = "id", ignore = true),
-            @Mapping(source = "price", target = "price")
+            @Mapping(source = "price", target = "price"),
+            @Mapping(source = "status", target = "status")
     })
-    ReservationEntity updateEntity(ReservationRq dto, @MappingTarget ReservationEntity entity, Double price, ManagerEntity manager,
+    ReservationEntity updateEntity(ReservationRq dto, @MappingTarget ReservationEntity entity, Double price,
+                                   Status status, ManagerEntity manager,
                                    ClientEntity client, TourEntity tour, FlightEntity flightFrom,
                                    FlightEntity flightTo, HotelEntity hotel);
 
-    ReservationRs EntityToRs(ReservationEntity dto);
+    @Mappings ({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(source = "status", target = "status"),
+            @Mapping(source = "tour.price", target = "price"),
+            @Mapping(source = "tour", target = "tour"),
+            @Mapping(target = "flightTo", ignore = true),
+            @Mapping(target = "flightFrom", ignore = true),
+            @Mapping(target = "hotel", ignore = true),
+            @Mapping(target = "paymentType", ignore = true),
+            @Mapping(target = "insuranceType", ignore = true),
+    })
+    ReservationEntity updateEntityCancelInProcess(CancelInProcessReservationRq dto, @MappingTarget ReservationEntity entity,
+                                   Status status, ManagerEntity manager,
+                                   ClientEntity client, TourEntity tour);
+
+
+    @Mappings({
+            @Mapping(source = "dto.id", target = "id"),
+            @Mapping(source = "dto.price", target = "price"),
+            @Mapping(source = "tour", target = "tour")
+    })
+
+    ReservationRs EntityToRs(ReservationEntity dto, TourRs tour);
 
     List<ReservationRs> ListEntitiesToListRq(List<ReservationEntity> entities);
 

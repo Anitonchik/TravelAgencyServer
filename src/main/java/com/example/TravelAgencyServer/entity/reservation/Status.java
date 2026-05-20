@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum Status {
     CONFIRMED("Подтверждено"),
     EXPECTATION("Ожидает"),
-    CANCELLED("Отменено");
+    CANCELED("Отменено");
 
     private final String title;
 }

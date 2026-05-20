@@ -1,8 +1,6 @@
 package com.example.TravelAgencyServer.service;
 
-import com.example.TravelAgencyServer.api.reservation.ReservationMapper;
-import com.example.TravelAgencyServer.api.reservation.ReservationRq;
-import com.example.TravelAgencyServer.api.reservation.ReservationRs;
+import com.example.TravelAgencyServer.api.reservation.*;
 import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.entity.hotel.HotelEntity;
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;
@@ -17,12 +15,10 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ReservationService {
@@ -74,7 +70,8 @@ public class ReservationService {
     public ReservationRs getById(Long id) {
         var entity = repository.findById(id);
         if (entity.isPresent()) {
-            return mapper.EntityToRs(entity.get());
+            var tour = tourService.mapTour(entity.get().getTour());
+            return mapper.EntityToRs(entity.get(), tour);
         }
         else {
             throw new EntityNotExistsException(id, "Бронирования не существует");
@@ -83,64 +80,95 @@ public class ReservationService {
 
     @Transactional(readOnly = true)
     public Page<ReservationRs> getAll(int pageNumber, int pageSize) {
-        return repository.findAll(PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+        return repository.findAll(PageRequest.of(pageNumber, pageSize)).map(entity -> {
+            var tour = tourService.mapTour(entity.getTour());
+            return mapper.EntityToRs(entity, tour);
+        });
     }
 
 
     @Transactional
     public Page<ReservationRs> getByDates(LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize){
-        return repository.findByReservationDateBetween(startDate, endDate, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+        return repository.findByReservationDateBetween(startDate, endDate, PageRequest.of(pageNumber, pageSize))
+                .map(entity -> {
+                    var tour = tourService.mapTour(entity.getTour());
+                    return mapper.EntityToRs(entity, tour);
+                });
     }
 
 
     @Transactional
     public Page<ReservationRs> getByClientId(Long clientId, int pageNumber, int pageSize){
-        return repository.findByClient_Id(clientId, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+        return repository.findByClient_Id(clientId, PageRequest.of(pageNumber, pageSize))
+                .map(entity -> {
+                    var tour = tourService.mapTour(entity.getTour());
+                    return mapper.EntityToRs(entity, tour);
+                });
     }
 
     @Transactional
     public Page<ReservationRs> getByClientName(String name, int pageNumber, int pageSize){
         return repository.findByClient_FirstNameContainingIgnoreCaseOrClient_LastNameContainingIgnoreCaseOrClient_SurNameContainingIgnoreCase
-                (name, name, name, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+                (name, name, name, PageRequest.of(pageNumber, pageSize))
+                .map(entity -> {
+                    var tour = tourService.mapTour(entity.getTour());
+                    return mapper.EntityToRs(entity, tour);
+                });
     }
 
     @Transactional
     public Page<ReservationRs> getByStatus(Status status, int pageNumber, int pageSize){
-        return repository.findByStatus(status, PageRequest.of(pageNumber, pageSize)).map(mapper::EntityToRs);
+        return repository.findByStatus(status, PageRequest.of(pageNumber, pageSize))
+                .map(entity -> {
+                    var tour = tourService.mapTour(entity.getTour());
+                    return mapper.EntityToRs(entity, tour);
+                });
     }
 
-
     @Transactional
-    public ReservationRs create(ReservationRq dto) {
+    public ReservationRs startReservation(StartReservationRq dto) {
         var manager = managerService.findById(dto.managerId());
         var client = clientService.findById(dto.clientId());
         var tour = tourService.findById(dto.tourId());
-        FlightEntity flightFrom = null;
-        FlightEntity flightTo = null;
-        HotelEntity hotel = null;
-
-        if (dto.flightFromId() != null) {
-            flightFrom = flightService.updateCountOfSeats(dto.flightFromId());
-        }
-        if (dto.flightToId() != null) {
-            flightTo = flightService.updateCountOfSeats(dto.flightToId());
-        }
-        if (dto.hotelId() != null) {
-            hotel = hotelService.findById(dto.hotelId());
-        }
-
-        ReservationEntity entity;
-        if (dto.flightFromId() != null && dto.flightToId() != null && dto.hotelId() != null) {
-            var price = tour.getPrice() + flightFrom.getPrice() + flightTo.getPrice() + hotel.getPrice();
-            entity = repository.save(mapper.RqToEntity(dto, price, manager, client, tour, flightFrom, flightTo, hotel));
-        }
-        else {
-            entity = repository.save(mapper.RqToEntity(dto, Status.EXPECTATION, manager, client, tour));
-        }
-        return mapper.EntityToRs(entity);
+        var tourRs = tourService.mapTour(tour);
+        return mapper.EntityToRs(repository.save(mapper.RqToEntity(dto, Status.EXPECTATION, manager, client, tour)), tourRs);
     }
 
     @Transactional
+    public ReservationRs endReservation(ReservationRq dto, Status status) {
+        var expEntity = findById(dto.id());
+        var manager = managerService.findById(dto.managerId());
+        var client = clientService.findById(dto.clientId());
+        var tour = tourService.findById(dto.tourId());
+        var flightFrom = flightService.updateCountOfSeats(dto.flightFromId());
+        var flightTo = flightService.updateCountOfSeats(dto.flightToId());
+        var hotel = hotelService.findById(dto.hotelId());
+
+        var price = tour.getPrice() + flightFrom.getPrice() + flightTo.getPrice() + hotel.getPrice();
+        var entity = repository.save(mapper.updateEntity(dto, expEntity, price, status,
+                manager, client, tour, flightFrom, flightTo, hotel));
+
+        var tourRs = tourService.mapTour(tour);
+
+        return mapper.EntityToRs(entity, tourRs);
+    }
+
+    @Transactional
+    public ReservationRs cancelReservationInProcess(CancelInProcessReservationRq dto) {
+        var expEntity = findById(dto.id());
+        var manager = managerService.findById(dto.managerId());
+        var client = clientService.findById(dto.clientId());
+        var tour = tourService.findById(dto.tourId());
+
+        var entity = repository.save(mapper.updateEntityCancelInProcess(dto, expEntity,
+                Status.CANCELED, manager, client, tour));
+
+        var tourRs = tourService.mapTour(tour);
+
+        return mapper.EntityToRs(entity, tourRs);
+    }
+
+    /*@Transactional
     public ReservationRs update(ReservationRq dto, Long id) {
         var entity = findById(id);
         var manager = managerService.findById(dto.managerId());
@@ -153,7 +181,7 @@ public class ReservationService {
         var price = tour.getPrice() + flightFrom.getPrice() + flightTo.getPrice() + hotel.getPrice();
         var updatedEntity = mapper.updateEntity(dto, entity, price, manager, client, tour, flightFrom, flightTo, hotel);
         return mapper.EntityToRs(updatedEntity);
-    }
+    }*/
 
     @Transactional
     public byte[] generateVoucher(Long reservationId, boolean indicateTransfer, boolean indicateInsurance) throws Exception {
@@ -194,5 +222,16 @@ public class ReservationService {
     private void SaveVoucher(Long reservationId, byte[] voucher){
         var reservation = findById(reservationId);
         voucherRepository.save(new VoucherEntity(reservation, voucher));
+    }
+
+    @Transactional
+    public ReservationsCountRs getReservationsCountByStatus(){
+        var counts = repository.getCounts();
+        if (counts.isPresent()){
+            return counts.get();
+        }
+        else {
+            throw new EntityNotExistsException(0L, "Ошибка получения количества бронирований");
+        }
     }
 }

@@ -21,8 +21,8 @@ public class ManagerController {
     }
 
     @GetMapping("{managerId}")
-    public ManagerRs get(@PathVariable Long userId){
-        return service.getById(userId);
+    public ManagerRs get(@PathVariable Long managerId){
+        return service.getById(managerId);
     }
 
     @PostMapping
@@ -31,12 +31,12 @@ public class ManagerController {
     }
 
     @PutMapping("{managerId}")
-    public ManagerRs update(@RequestBody ManagerRq dto, @PathVariable Long userId) {
-        return service.update(dto, userId);
+    public ManagerRs update(@RequestBody ManagerRq dto, @PathVariable Long managerId) {
+        return service.update(dto, managerId);
     }
 
     @DeleteMapping("{managerId}")
-    public boolean delete(@PathVariable Long userId) {
-        return service.delete(userId);
+    public boolean delete(@PathVariable Long managerId) {
+        return service.delete(managerId);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TourType {
-    excursion("Экскурсионный"),
+    EXCURSION("Экскурсионный"),
     HEALTH("Оздоровительные"),
     SPORTS("Спортивный");
 
