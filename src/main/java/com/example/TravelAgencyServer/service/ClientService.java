@@ -13,17 +13,18 @@ import com.example.TravelAgencyServer.entity.client.ClientEntity;
 import com.example.TravelAgencyServer.entity.client.ClientPassportEntity;
 import com.example.TravelAgencyServer.exceptions.EntityNotExistsException;
 import com.example.TravelAgencyServer.repository.ClientRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Service
+@Validated
 public class ClientService {
     @Autowired
     private ClientRepository repository;
@@ -76,15 +77,16 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientRs create(ClientRq dto) {
+    public ClientRs create(@Valid ClientRq dto) {
         var entity = mapper.ClientRqToClientEntity(dto);
-        entity.setSnils(cipherService.encryptData(dto.snils()));
+        entity.setSnils(cipherService.encryptData(dto.getSnils()));
         repository.save(entity);
 
-        var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(), dto.passportNumbers(), dto.policyImage());
+        var passportRq = new ClientPassportRq(entity.getId(), dto.getPassportSeries(), 
+                dto.getPassportNumbers(), dto.getPassportImage());
         clientPassportService.create(passportRq);
 
-        var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.policy(), dto.policyImage());
+        var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.getPolicy(), dto.getPolicyImage());
         cmiPolicyService.create(cmiPolicyRq);
 
         var newEntity = repository.getClientPassportPolicy(entity.getId());
@@ -95,25 +97,25 @@ public class ClientService {
     }
 
     @Transactional
-    public ClientRs update(ClientRq dto, Long id) {
+    public ClientRs update(@Valid ClientRq dto, Long id) {
         var entity = findById(id);
         entity = mapper.UpdateClientRqToClientEntity(dto, entity);
 
         var passport = clientPassportService.getByClientId(id);
         var dcrPassport = decryptPassport(passport);
-        if (!Objects.equals(dcrPassport.getSeries(), dto.passportSeries())
-                || !Objects.equals(dcrPassport.getNumbers(), dto.passportNumbers())){
+        if (!Objects.equals(dcrPassport.getSeries(), dto.getPassportSeries())
+                || !Objects.equals(dcrPassport.getNumbers(), dto.getPassportNumbers())){
 
-            var passportRq = new ClientPassportRq(entity.getId(), dto.passportSeries(),
-                    dto.passportNumbers(), dto.policyImage());
+            var passportRq = new ClientPassportRq(entity.getId(), dto.getPassportSeries(),
+                    dto.getPassportNumbers(), dto.getPassportImage());
             clientPassportService.update(entity.getId(), passportRq);
         }
 
 
         var cmiPolicy = cmiPolicyService.getByClient(id);
         var dcrCmiPolicy = decryptPolicy(cmiPolicy);
-        if (!Objects.equals(dcrCmiPolicy.CMIPolicy(), dto.policy())) {
-            var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.policy(), dto.policyImage());
+        if (!Objects.equals(dcrCmiPolicy.CMIPolicy(), dto.getPolicy())) {
+            var cmiPolicyRq = new CMIPolicyRq(entity.getId(), dto.getPolicy(), dto.getPolicyImage());
             cmiPolicyService.update(entity.getId(), cmiPolicyRq);
         }
 

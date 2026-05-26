@@ -1,5 +1,6 @@
 package com.example.TravelAgencyServer.api.tour;
 
+import com.example.TravelAgencyServer.entity.tour.TourCity;
 import com.example.TravelAgencyServer.entity.tour.TourIntensity;
 import com.example.TravelAgencyServer.entity.tour.TourType;
 import jakarta.validation.constraints.*;
@@ -12,7 +13,7 @@ public record TourRq(
         String name,
         @NotBlank
         @Size (min = 6, max = 255)
-        String direction,
+        TourCity direction,
         @NotBlank
         String description,
         @NotBlank

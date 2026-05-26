@@ -13,10 +13,11 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
-
-
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 
 @Service
 public class VoucherService {
@@ -25,8 +26,9 @@ public class VoucherService {
             boolean indicateTransfer,
             boolean indicateInsurance,
             VoucherInfoDecrypted voucherInfo,
-            LocalDateTime dateOfIssueOfTheVoucher
+            Date dateOfIssueOfTheVoucher
     ) throws Exception {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(baos);
         PdfDocument pdf = new PdfDocument(writer);
@@ -59,7 +61,10 @@ public class VoucherService {
 
         table.addCell(bold("Ваучер", fontBold));
         table.addCell(bold("Дата выдачи", fontBold));
-        table.addCell(normal(dateOfIssueOfTheVoucher.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), font));
+        LocalDateTime dateVoucher = voucherInfo.getTourDateFrom().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        table.addCell(normal(dateVoucher.format(formatter), font));
         table.addCell(bold("Город", fontBold));
         table.addCell(normal(voucherInfo.getTourDirection(), font));
 
@@ -67,8 +72,15 @@ public class VoucherService {
         table.addCell(normal(voucherInfo.getTourName(), font, 3));
 
         table.addCell(bold("Даты тура", fontBold));
-        table.addCell(normal(voucherInfo.getTourDateFrom().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), font));
-        table.addCell(normal(voucherInfo.getTourDateTo().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), font));
+        LocalDateTime fromDate = voucherInfo.getTourDateFrom().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        LocalDateTime toDate = voucherInfo.getTourDateTo().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        table.addCell(normal(fromDate.format(formatter), font));
+        table.addCell(normal(toDate.format(formatter), font));
         table.addCell(normal("", font));
         table.addCell(normal("", font));
 
@@ -98,9 +110,12 @@ public class VoucherService {
 
         table.addCell(normal("", font));
         table.addCell(bold("Дата", fontBold));
-        table.addCell(normal(voucherInfo.getFlightFromDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), font));
+        LocalDateTime dateFlight1 = voucherInfo.getTourDateFrom().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        table.addCell(normal(dateFlight1.format(formatter), font));
         table.addCell(bold("Время", fontBold));
-        table.addCell(normal(voucherInfo.getFlightFromDate().format(DateTimeFormatter.ofPattern("HH:mm")), font));
+        table.addCell(normal(dateFlight1.format(DateTimeFormatter.ofPattern("HH:mm")), font));
 
 
         table.addCell(bold("Авиакомпания", fontBold));
@@ -111,9 +126,12 @@ public class VoucherService {
 
         table.addCell(normal("", font));
         table.addCell(bold("Дата", fontBold));
-        table.addCell(normal(voucherInfo.getFlightToDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), font));
+        LocalDateTime dateFlight2 = voucherInfo.getTourDateFrom().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+        table.addCell(normal(dateFlight2.format(formatter), font));
         table.addCell(bold("Время", fontBold));
-        table.addCell(normal(voucherInfo.getFlightToDate().format(DateTimeFormatter.ofPattern("HH:mm")), font));
+        table.addCell(normal(dateFlight2.format(DateTimeFormatter.ofPattern("HH:mm")), font));
 
         if (indicateTransfer) {
             table.addCell(bold("Трансфер", fontBold));

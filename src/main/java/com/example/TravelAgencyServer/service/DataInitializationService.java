@@ -4,6 +4,7 @@ import com.example.TravelAgencyServer.entity.flight.FlightEntity;
 import com.example.TravelAgencyServer.entity.hotel.FoodType;
 import com.example.TravelAgencyServer.entity.hotel.HotelEntity;
 import com.example.TravelAgencyServer.entity.manager.ManagerEntity;
+import com.example.TravelAgencyServer.entity.tour.TourCity;
 import com.example.TravelAgencyServer.entity.tour.TourEntity;
 import com.example.TravelAgencyServer.entity.tour.TourIntensity;
 import com.example.TravelAgencyServer.entity.tour.TourType;
@@ -654,7 +655,7 @@ public class DataInitializationService {
 
         // Тур 1: Москва - Культурная столица
         TourEntity tour1 = new TourEntity(
-                "МОСКВА-ГРАД 5 дней", "Москва",
+                "МОСКВА-ГРАД 5 дней", TourCity.MOSCOW,
                 "Погружение в историю и культуру Москвы: Кремль, Красная площадь, Третьяковская галерея и лучшие рестораны",
                 "5 дней/4 ночи", 40, 42500.0,
                 parseDate("2025-06-10"), parseDate("2025-06-15"), true,
@@ -665,7 +666,7 @@ public class DataInitializationService {
 
         // Тур 2: Москва VIP
         TourEntity tour2 = new TourEntity(
-                "МОСКВА VIP 7 дней", "Москва",
+                "МОСКВА VIP 7 дней", TourCity.MOSCOW,
                 "Элитный тур по Москве: бутик-отели, лучшие рестораны, Большой театр и шопинг в ЦУМе",
                 "7 дней/6 ночей", 20, 89500.0,
                 parseDate("2025-07-01"), parseDate("2025-07-08"), true,
@@ -676,7 +677,7 @@ public class DataInitializationService {
 
         // Тур 3: Санкт-Петербург - Северная Венеция
         TourEntity tour3 = new TourEntity(
-                "ПИТЕР-ЭКСПРЕСС 6 дней", "Санкт-Петербург",
+                "ПИТЕР-ЭКСПРЕСС 6 дней", TourCity.SAINT_PETERSBURG,
                 "Эрмитаж, Петергоф, Царское Село, экскурсия по рекам и каналам",
                 "6 дней/5 ночей", 35, 49800.0,
                 parseDate("2025-07-05"), parseDate("2025-07-11"), true,
@@ -687,7 +688,7 @@ public class DataInitializationService {
 
         // Тур 4: Казань - Татарстан открытие
         TourEntity tour4 = new TourEntity(
-                "КАЗАНЬ - ТРЕТЬЯ СТОЛИЦА 4 дня", "Казань",
+                "КАЗАНЬ - ТРЕТЬЯ СТОЛИЦА 4 дня", TourCity.KAZAN,
                 "Казанский Кремль, мечеть Кул-Шариф, остров-град Свияжск, татарская кухня",
                 "4 дня/3 ночи", 45, 28500.0,
                 parseDate("2025-06-20"), parseDate("2025-06-24"), true,
@@ -698,7 +699,7 @@ public class DataInitializationService {
 
         // Тур 5: Нижний Новгород - Стрелка волжская
         TourEntity tour5 = new TourEntity(
-                "НИЖНИЙ НОВГОРОД - СЕРДЦЕ ПОВОЛЖЬЯ 4 дня", "Нижний Новгород",
+                "НИЖНИЙ НОВГОРОД - СЕРДЦЕ ПОВОЛЖЬЯ 4 дня", TourCity.NIZHNY_NOVGOROD,
                 "Нижегородский кремль, Чкаловская лестница, ярмарка, прогулка по набережной",
                 "4 дня/3 ночи", 45, 24500.0,
                 parseDate("2025-07-15"), parseDate("2025-07-19"), true,
@@ -709,7 +710,7 @@ public class DataInitializationService {
 
         // Тур 6: Екатеринбург - Уральский экспресс
         TourEntity tour6 = new TourEntity(
-                "ЕКАТЕРИНБУРГ - ГРАНИЦА ЕВРОПЫ 6 дней", "Екатеринбург",
+                "ЕКАТЕРИНБУРГ - ГРАНИЦА ЕВРОПЫ 6 дней", TourCity.YEKATERINBURG,
                 "Экскурсия по Екатеринбургу, граница Европа-Азия, Ганина Яма, Невьянская башня",
                 "6 дней/5 ночей", 30, 39500.0,
                 parseDate("2025-08-01"), parseDate("2025-08-07"), true,
@@ -720,7 +721,7 @@ public class DataInitializationService {
 
         // Тур 7: Новосибирск - Сибирское приключение
         TourEntity tour7 = new TourEntity(
-                "НОВОСИБИРСК - СИБИРСКАЯ СИЛА 7 дней", "Новосибирск",
+                "НОВОСИБИРСК - СИБИРСКАЯ СИЛА 7 дней", TourCity.NOVOROSSIYSK,
                 "Новосибирск, Академгородок, Обское море, Бердские скалы",
                 "7 дней/6 ночей", 35, 52500.0,
                 parseDate("2025-08-10"), parseDate("2025-08-17"), true,
@@ -731,7 +732,7 @@ public class DataInitializationService {
 
         // Тур 8: Краснодар - Кубанская жемчужина
         TourEntity tour8 = new TourEntity(
-                "КРАСНОДАР - ЛУЧШИЙ ЮГ 5 дней", "Краснодар",
+                "КРАСНОДАР - ЛУЧШИЙ ЮГ 5 дней", TourCity.KRASNOYARSK,
                 "Экскурсии по Краснодару, парк Галицкого, кубанские вина, краснодарский край",
                 "5 дней/4 ночи", 40, 35800.0,
                 parseDate("2025-07-25"), parseDate("2025-07-30"), true,
@@ -742,7 +743,7 @@ public class DataInitializationService {
 
         // Тур 9: Калининград - Самый западный форпост
         TourEntity tour9 = new TourEntity(
-                "КАЛИНИНГРАД - ПРУССКИЕ СКАЗКИ 7 дней", "Калининград",
+                "КАЛИНИНГРАД - ПРУССКИЕ СКАЗКИ 7 дней", TourCity.KALININGRAD,
                 "Кафедральный собор, Куршская коса, форты Кенигсберга, Музей янтаря",
                 "7 дней/6 ночей", 30, 55800.0,
                 parseDate("2025-08-20"), parseDate("2025-08-27"), true,
@@ -753,7 +754,7 @@ public class DataInitializationService {
 
         // Тур 10: Владивосток - Конец земли
         TourEntity tour10 = new TourEntity(
-                "ВЛАДИВОСТОК - МОРСКАЯ КРЕПОСТЬ 9 дней", "Владивосток",
+                "ВЛАДИВОСТОК - МОРСКАЯ КРЕПОСТЬ 9 дней", TourCity.VLADIVOSTOK,
                 "Золотой мост, Русский мост, остров Русский, маяк Токаревского, морская прогулка",
                 "9 дней/8 ночей", 40, 89500.0,
                 parseDate("2025-09-01"), parseDate("2025-09-10"), true,
@@ -764,7 +765,7 @@ public class DataInitializationService {
 
         // Тур 11: Крым - Солнечный полуостров
         TourEntity tour11 = new TourEntity(
-                "КРЫМ - ЛАСТОЧКИНО ГНЕЗДО 7 дней", "Крым",
+                "Казань - ЛАСТОЧКИНО ГНЕЗДО 7 дней", TourCity.KAZAN,
                 "Ялта, Севастополь, Ливадийский дворец, Ай-Петри, Ласточкино гнездо",
                 "7 дней/6 ночей", 45, 52800.0,
                 parseDate("2025-07-10"), parseDate("2025-07-17"), true,
@@ -775,7 +776,7 @@ public class DataInitializationService {
 
         // Тур 12: Алтай - Горная сила
         TourEntity tour12 = new TourEntity(
-                "АЛТАЙ - СИЛА ПРИРОДЫ 9 дней", "Алтай",
+                "Уфа - СИЛА ПРИРОДЫ 9 дней", TourCity.UFA,
                 "Телецкое озеро, Чуйский тракт, долина реки Катунь, конные прогулки",
                 "9 дней/8 ночей", 25, 78900.0,
                 parseDate("2025-08-05"), parseDate("2025-08-14"), true,
@@ -786,7 +787,7 @@ public class DataInitializationService {
 
         // Тур 13: Байкал - Священное море
         TourEntity tour13 = new TourEntity(
-                "БАЙКАЛ - ЖЕМЧУЖИНА РОССИИ 9 дней", "Байкал",
+                "Дербент - ЖЕМЧУЖИНА РОССИИ 9 дней", TourCity.DERBENT,
                 "Озеро Байкал, остров Ольхон, шаман-камень, КБЖД, горячие источники",
                 "9 дней/8 ночей", 35, 89500.0,
                 parseDate("2025-09-05"), parseDate("2025-09-14"), true,
@@ -797,7 +798,7 @@ public class DataInitializationService {
 
         // Тур 14: Сочи - Лучший пляж
         TourEntity tour14 = new TourEntity(
-                "СОЧИ - МОРСКОЙ БРИЗ 7 дней", "Сочи",
+                "СОЧИ - МОРСКОЙ БРИЗ 7 дней", TourCity.SOCHI,
                 "Олимпийский парк, пляжи Имеретинки, дендрарий, Ахун, парк Ривьера",
                 "7 дней/6 ночей", 50, 58900.0,
                 parseDate("2025-07-15"), parseDate("2025-07-22"), true,
@@ -808,7 +809,7 @@ public class DataInitializationService {
 
         // Тур 15: Кисловодск - Кавказское здоровье
         TourEntity tour15 = new TourEntity(
-                "КИСЛОВОДСК - НАРЗАННЫЙ РАЙ 7 дней", "Кисловодск",
+                "КИСЛОВОДСК - НАРЗАННЫЙ РАЙ 7 дней", TourCity.KISLOVODSK,
                 "Лечение минеральными водами, Курортный парк, гора Кольцо, Долина роз",
                 "7 дней/6 ночей", 40, 45900.0,
                 parseDate("2025-08-10"), parseDate("2025-08-17"), true,
@@ -819,7 +820,7 @@ public class DataInitializationService {
 
         // Тур 16: Ростов-на-Дону - Донская вольница
         TourEntity tour16 = new TourEntity(
-                "РОСТОВ-НА-ДОНУ - БАТЮШКА ДОН 6 дней", "Ростов-на-Дону",
+                "РОСТОВ-НА-ДОНУ - БАТЮШКА ДОН 6 дней", TourCity.ROSTOV_VELIKY,
                 "Набережная, Театральная площадь, станица Старочеркасская, Таганрог",
                 "6 дней/5 ночей", 35, 35900.0,
                 parseDate("2025-09-10"), parseDate("2025-09-16"), true,
@@ -830,7 +831,7 @@ public class DataInitializationService {
 
         // Тур 17: Волгоград - Город-герой
         TourEntity tour17 = new TourEntity(
-                "ВОЛГОГРАД - СТАЛИНГРАДСКАЯ БИТВА 6 дней", "Волгоград",
+                "ВОЛГОГРАД - СТАЛИНГРАДСКАЯ БИТВА 6 дней", TourCity.VOLGOGRAD,
                 "Мамаев курган, Родина-мать, мельница Гергардта, панорама Сталинградской битвы",
                 "6 дней/5 ночей", 40, 32900.0,
                 parseDate("2025-08-20"), parseDate("2025-08-26"), true,
@@ -841,7 +842,7 @@ public class DataInitializationService {
 
         // Тур 18: Самара - Космическая столица
         TourEntity tour18 = new TourEntity(
-                "САМАРА - КОСМИЧЕСКАЯ 5 дней", "Самара",
+                "САМАРА - КОСМИЧЕСКАЯ 5 дней", TourCity.SAMARA,
                 "Музей космонавтики, бункер Сталина, ракета Союз, набережная Волги",
                 "5 дней/4 ночи", 40, 26900.0,
                 parseDate("2025-09-25"), parseDate("2025-09-30"), true,
@@ -852,7 +853,7 @@ public class DataInitializationService {
 
         // Тур 19: Золотое кольцо (через Москву)
         TourEntity tour19 = new TourEntity(
-                "ЗОЛОТОЕ КОЛЬЦО - РУСЬ ИСКОННАЯ 8 дней", "Москва",
+                "ЗОЛОТОЕ КОЛЬЦО - РУСЬ ИСКОННАЯ 8 дней", TourCity.MOSCOW,
                 "Сергиев Посад, Суздаль, Владимир, Ярославль, Кострома, Переславль-Залесский",
                 "8 дней/7 ночей", 30, 65900.0,
                 parseDate("2025-08-01"), parseDate("2025-08-09"), true,
@@ -863,7 +864,7 @@ public class DataInitializationService {
 
         // Тур 20: Дагестан - Кавказ гостеприимный
         TourEntity tour20 = new TourEntity(
-                "ДАГЕСТАН - КАВКАЗСКИЙ ДУХ 8 дней", "Дагестан",
+                "Иркутск", TourCity.IRKUTSK,
                 "Сулакский каньон, бархан Сарыкум, Дербент, Чох, Гамсутль, озеро Казеной-Ам",
                 "8 дней/7 ночей", 30, 59800.0,
                 parseDate("2025-07-20"), parseDate("2025-07-28"), true,

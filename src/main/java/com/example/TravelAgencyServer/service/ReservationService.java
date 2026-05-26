@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
+import static com.itextpdf.kernel.xmp.PdfConst.Date;
 
 @Service
 public class ReservationService {
@@ -198,7 +201,7 @@ public class ReservationService {
                 var voucherInfoDecrypted = mapper.EncryptedToDecrypted(voucherInfoEncrypted.get(), passportSeries, passportNumbers);
 
                 var voucher = voucherService.generateReservationPdf(indicateTransfer,
-                        indicateInsurance, voucherInfoDecrypted, LocalDateTime.now());
+                        indicateInsurance, voucherInfoDecrypted, new Date());
                 SaveVoucher(reservationId, voucher);
                 return voucher;
             } else {

@@ -6,92 +6,106 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
-    @Query(value = """
-    SELECT DISTINCT c.id,
-    c.first_name,
-    c.last_name,
-    c.sur_name,
-    CAST(c.birth_date AS timestamp) as birth_date,
-    c.snils,
-    c.email,
-    c.phone,
-    c.preference_description,
-    p.id as passportId,
-    p.series as passportSeries,
-    p.numbers as passportNumbers,
-    p.image as passportImage,
-    cmi.id as policyId,
-    cmi.CMIPolicy as CMIPolicy,
-    cmi.image as policyImage
-    FROM client_entity c
-    JOIN client_passport_entity p ON c.id = p.client_id
-    JOIN cmipolicy_entity cmi ON c.id = cmi.client_id
-    WHERE c.id = :id
-      AND p.is_active = true
-      AND cmi.is_active = true
-      AND c.is_deleted = false
-    LIMIT 1
-""", nativeQuery = true)
-    Optional<ClientPassportCMIPolicy> getClientPassportPolicy(Long id);
 
-    @Query(value = """
-    SELECT DISTINCT c.id,
-    c.first_name,
-    c.last_name,
-    c.sur_name,
-    CAST(c.birth_date AS timestamp) as birth_date,
-    c.snils,
-    c.email,
-    c.phone,
-    c.preference_description,
-    p.id as passportId,
-    p.series as passportSeries,
-    p.numbers as passportNumbers,
-    p.image as passportImage,
-    cmi.id as policyId,
-    cmi.CMIPolicy as CMIPolicy,
-    cmi.image as policyImage
-    FROM client_entity c
-    JOIN client_passport_entity p ON c.id = p.client_id
-    JOIN cmipolicy_entity cmi ON c.id = cmi.client_id
-    WHERE p.is_active = true
-      AND cmi.is_active = true
-      AND c.is_deleted = false
-""", nativeQuery = true)
+    @Query("""
+    SELECT NEW com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy(
+        c.id,
+        c.firstName,
+        c.lastName,
+        c.surName,
+        c.birthDate,
+        c.snils,
+        c.email,
+        c.phone,
+        c.preferenceCity,
+        c.preferenceDateFrom,
+        c.preferencePriceFrom,
+        c.preferencePriceTo,
+        p.id,
+        p.series,
+        p.numbers,
+        p.image,
+        cmi.id,
+        cmi.CMIPolicy,
+        cmi.image
+    )
+    FROM ClientEntity c
+    JOIN c.passports p
+    JOIN c.CMIPolicies cmi
+    WHERE c.id = :id
+      AND p.isActive = true
+      AND cmi.isActive = true
+      AND c.isDeleted = false
+    """)
+    Optional<ClientPassportCMIPolicy> getClientPassportPolicy(@Param("id") Long id);
+
+    @Query("""
+    SELECT NEW com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy(
+        c.id,
+        c.firstName,
+        c.lastName,
+        c.surName,
+        c.birthDate,
+        c.snils,
+        c.email,
+        c.phone,
+        c.preferenceCity,
+        c.preferenceDateFrom,
+        c.preferencePriceFrom,
+        c.preferencePriceTo,
+        p.id,
+        p.series,
+        p.numbers,
+        p.image,
+        cmi.id,
+        cmi.CMIPolicy,
+        cmi.image
+    )
+    FROM ClientEntity c
+    JOIN c.passports p
+    JOIN c.CMIPolicies cmi
+    WHERE p.isActive = true
+      AND cmi.isActive = true
+      AND c.isDeleted = false
+    """)
     Page<ClientPassportCMIPolicy> getAllClientPassportPolicy(Pageable pageable);
 
-
-    @Query(value = """
-    SELECT DISTINCT c.id,
-    c.first_name,
-    c.last_name,
-    c.sur_name,
-    CAST(c.birth_date AS timestamp) as birth_date,
-    c.snils,
-    c.email,
-    c.phone,
-    c.preference_description,
-    p.id as passportId,
-    p.series as passportSeries,
-    p.numbers as passportNumbers,
-    p.image as passportImage,
-    cmi.id as policyId,
-    cmi.CMIPolicy as CMIPolicy,
-    cmi.image as policyImage
-    FROM client_entity c
-    JOIN client_passport_entity p ON c.id = p.client_id
-    JOIN cmipolicy_entity cmi ON c.id = cmi.client_id
-    WHERE p.is_active = true
-      AND cmi.is_active = true
-      AND c.is_deleted = false
-      AND LOWER(CONCAT(c.last_name, c.first_name, c.sur_name)) LIKE LOWER(CONCAT('%', :name, '%'))
-""", nativeQuery = true)
-    Page<ClientPassportCMIPolicy> getAllClientPassportPolicyByName(String name, Pageable pageable);
+    @Query("""
+    SELECT NEW com.example.TravelAgencyServer.entity.client.ClientPassportCMIPolicy(
+        c.id,
+        c.firstName,
+        c.lastName,
+        c.surName,
+        c.birthDate,
+        c.snils,
+        c.email,
+        c.phone,
+        c.preferenceCity,
+        c.preferenceDateFrom,
+        c.preferencePriceFrom,
+        c.preferencePriceTo,
+        p.id,
+        p.series,
+        p.numbers,
+        p.image,
+        cmi.id,
+        cmi.CMIPolicy,
+        cmi.image
+    )
+    FROM ClientEntity c
+    JOIN c.passports p
+    JOIN c.CMIPolicies cmi
+    WHERE p.isActive = true
+      AND cmi.isActive = true
+      AND c.isDeleted = false
+      AND LOWER(CONCAT(c.lastName, c.firstName, c.surName)) LIKE LOWER(CONCAT('%', :name, '%'))
+    """)
+    Page<ClientPassportCMIPolicy> getAllClientPassportPolicyByName(@Param("name") String name, Pageable pageable);
 }

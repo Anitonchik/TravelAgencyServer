@@ -20,8 +20,9 @@ public class TourEntity {
     private Long id;
     @Column(unique = true, nullable = false)
     private String name;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String direction;
+    private TourCity direction;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
@@ -55,7 +56,7 @@ public class TourEntity {
             inverseJoinColumns= @JoinColumn(name="hotel_id", referencedColumnName="id") )
     private List<HotelEntity> hotels;
 
-    public TourEntity(String name, String direction, String description, String duration, int numberOfSeats, Double price,
+    public TourEntity(String name, TourCity direction, String description, String duration, int numberOfSeats, Double price,
                       Date dateFrom, Date dateTo, Boolean isTransferExists, TourType tourType,
                       TourIntensity tourIntensity, List<FlightEntity> flights, List<HotelEntity> hotels) {
         this.name = name;

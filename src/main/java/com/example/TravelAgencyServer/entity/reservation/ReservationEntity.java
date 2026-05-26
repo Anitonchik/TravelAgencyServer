@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,7 +24,7 @@ public class ReservationEntity {
     private Long id;
 
     @Column
-    private LocalDateTime reservationDate;
+    private Date reservationDate;
 
     @ManyToOne
     @JoinColumn(name = "manager_id", nullable = false)
@@ -64,7 +65,7 @@ public class ReservationEntity {
     @Column
     private Double price;
 
-    public ReservationEntity(LocalDateTime reservationDate, ManagerEntity manager, ClientEntity client, TourEntity tour,
+    public ReservationEntity(Date reservationDate, ManagerEntity manager, ClientEntity client, TourEntity tour,
                              FlightEntity flightTo, FlightEntity flightFrom, HotelEntity hotel,
                              Status status, PaymentType paymentType, InsuranceType insuranceType, Double price) {
         this.reservationDate = reservationDate;

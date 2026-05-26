@@ -16,7 +16,7 @@ public class TravelAgencyServerApplication {
     /*@Bean
     public CommandLineRunner initData(DataInitializationService initService) {
         return args -> {
-            initService.initializeTestData();
+            initService.initializeToursData();
             System.out.println("Тестовые данные успешно созданы!");
         };
     }*/

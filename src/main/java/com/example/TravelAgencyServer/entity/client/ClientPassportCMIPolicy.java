@@ -1,5 +1,7 @@
 package com.example.TravelAgencyServer.entity.client;
 
+import com.example.TravelAgencyServer.entity.tour.TourCity;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +28,13 @@ public class ClientPassportCMIPolicy {
 
     private String phone;
 
-    private String preferenceDescription;
+    private TourCity preferenceCity;
+
+    private Date preferenceDateFrom;
+
+    private Double preferencePriceFrom;
+
+    private Double preferencePriceTo;
 
     private Long passportId;
 
