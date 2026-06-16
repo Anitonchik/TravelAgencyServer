@@ -31,7 +31,7 @@ public class HotelEntity {
     @Column(unique = true, nullable = false)
     private String location;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1500)
     private String image;
 
     @Enumerated(EnumType.STRING)

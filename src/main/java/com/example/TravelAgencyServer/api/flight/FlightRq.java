@@ -3,6 +3,8 @@ package com.example.TravelAgencyServer.api.flight;
 import com.example.TravelAgencyServer.entity.flight.AirlineName;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public record FlightRq (
@@ -13,7 +15,7 @@ public record FlightRq (
         @NotBlank
         String locationTo,
         @NotBlank
-        Date date,
+        LocalDate date,
         @NotBlank
         int countOfSeats) {
 }

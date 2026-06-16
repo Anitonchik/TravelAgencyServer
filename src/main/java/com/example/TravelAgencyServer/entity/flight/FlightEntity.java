@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -26,7 +27,7 @@ public class FlightEntity {
     @Column(nullable = false)
     private String locationTo;
     @Column(nullable = false)
-    private Date date;
+    private LocalDateTime date;
     @Column(nullable = false)
     private Double price;
     @Column
@@ -39,7 +40,7 @@ public class FlightEntity {
     private List<ReservationEntity> reservationsFrom = new ArrayList<>();
 
     public FlightEntity(String airlineName, String locationFrom, String locationTo,
-                        Date date, Double price, int countOfSeats) {
+                        LocalDateTime date, Double price, int countOfSeats) {
         this.airlineName = airlineName;
         this.locationFrom = locationFrom;
         this.locationTo = locationTo;

@@ -20,5 +20,4 @@ public class TravelAgencyServerApplication {
             System.out.println("Тестовые данные успешно созданы!");
         };
     }*/
-
 }

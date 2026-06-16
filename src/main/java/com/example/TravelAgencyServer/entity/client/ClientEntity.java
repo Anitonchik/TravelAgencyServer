@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ public class ClientEntity {
     @Column(nullable = false)
     private String surName;
     @Column(nullable = false)
-    private Date birthDate;
+    private LocalDateTime birthDate;
     @Column(nullable = false)
     private byte[] snils;
     @Column(nullable = false, unique = true)
@@ -38,7 +39,7 @@ public class ClientEntity {
     @Column(nullable = false)
     private TourCity preferenceCity;
     @Column(nullable = false)
-    private Date preferenceDateFrom;
+    private LocalDateTime preferenceDateFrom;
     @Column(nullable = false)
     private Double preferencePriceFrom;
     @Column(nullable = false)
@@ -52,8 +53,8 @@ public class ClientEntity {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<CMIPolicyEntity> CMIPolicies = new ArrayList<>();
 
-    public ClientEntity(String firstName, String lastName, String surName, Date birthDate, byte[] snils, String email, String phone,
-                        TourCity preferenceCity, Date preferenceDateFrom, Double preferencePriceFrom,
+    public ClientEntity(String firstName, String lastName, String surName, LocalDateTime birthDate, byte[] snils, String email, String phone,
+                        TourCity preferenceCity, LocalDateTime preferenceDateFrom, Double preferencePriceFrom,
                         Double preferencePriceTo) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -5,6 +5,8 @@ import com.example.TravelAgencyServer.entity.tour.TourIntensity;
 import com.example.TravelAgencyServer.entity.tour.TourType;
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public record TourRq(
@@ -26,10 +28,10 @@ public record TourRq(
         Double price,
         @NotBlank
         @Future
-        Date dateFrom,
+        LocalDate dateFrom,
         @NotBlank
         @Future
-        Date dateTo,
+        LocalDate dateTo,
         @NotBlank
         Boolean isTransferExists,
         @NotBlank
@@ -37,5 +39,7 @@ public record TourRq(
         @NotBlank
         TourType tourType,
         @NotBlank
-        TourIntensity tourIntensity) {
+        TourIntensity tourIntensity,
+        @NotBlank
+        String image) {
 }

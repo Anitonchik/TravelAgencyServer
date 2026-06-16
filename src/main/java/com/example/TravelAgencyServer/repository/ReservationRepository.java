@@ -1,5 +1,6 @@
 package com.example.TravelAgencyServer.repository;
 
+import com.example.TravelAgencyServer.api.reservation.ReservationController;
 import com.example.TravelAgencyServer.api.reservation.ReservationRs;
 import com.example.TravelAgencyServer.api.reservation.ReservationsCountRs;
 import com.example.TravelAgencyServer.entity.reservation.ReservationEntity;

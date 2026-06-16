@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class ClientPassportCMIPolicy {
 
     private String surName;
 
-    private Date birthDate;
+    private LocalDateTime birthDate;
 
     private byte[] snils;
 
@@ -30,7 +31,7 @@ public class ClientPassportCMIPolicy {
 
     private TourCity preferenceCity;
 
-    private Date preferenceDateFrom;
+    private LocalDateTime preferenceDateFrom;
 
     private Double preferencePriceFrom;
 

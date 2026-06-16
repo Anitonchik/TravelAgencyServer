@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -32,9 +33,9 @@ public class TourEntity {
     @Column(nullable = false)
     private Double price;
     @Column(nullable = false)
-    private Date dateFrom;
+    private LocalDateTime dateFrom;
     @Column(nullable = false)
-    private Date dateTo;
+    private LocalDateTime dateTo;
     @Column(nullable = false)
     private Boolean isTransferExists;
     @Enumerated(EnumType.STRING)
@@ -43,6 +44,8 @@ public class TourEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TourIntensity tourIntensity;
+    @Column(nullable = false, length = 1500)
+    private String image;
 
     @ManyToMany
     @JoinTable(name="tour_flight",
@@ -57,8 +60,8 @@ public class TourEntity {
     private List<HotelEntity> hotels;
 
     public TourEntity(String name, TourCity direction, String description, String duration, int numberOfSeats, Double price,
-                      Date dateFrom, Date dateTo, Boolean isTransferExists, TourType tourType,
-                      TourIntensity tourIntensity, List<FlightEntity> flights, List<HotelEntity> hotels) {
+                      LocalDateTime dateFrom, LocalDateTime dateTo, Boolean isTransferExists, TourType tourType,
+                      TourIntensity tourIntensity, String image, List<FlightEntity> flights, List<HotelEntity> hotels) {
         this.name = name;
         this.direction = direction;
         this.description = description;
@@ -70,6 +73,7 @@ public class TourEntity {
         this.isTransferExists = isTransferExists;
         this.tourType = tourType;
         this.tourIntensity = tourIntensity;
+        this.image = image;
         this.flights = flights;
         this.hotels = hotels;
     }
