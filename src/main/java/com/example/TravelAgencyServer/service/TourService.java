@@ -64,10 +64,10 @@ public class TourService {
     @Transactional(readOnly = true)
     public Page<TourRs> getByClientPreferences(Long clientId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        var client = clientRepository.findById(clientId)
+        var client = clientRepository.getClientPassportPolicy(clientId)
                 .orElseThrow(() -> new EntityNotExistsException(clientId, "При получении предпочтений нет клиента"));
 
-        return repository
+        var t =  repository
                 .findByDirectionAndDateFromGreaterThanEqualAndPriceBetween(
                         client.getPreferenceCity(),
                         client.getPreferenceDateFrom(),
@@ -75,9 +75,7 @@ public class TourService {
                         client.getPreferencePriceTo(),
                         PageRequest.of(pageNumber, pageSize))
                 .map(this::mapTour);
-        /*return repository.findByDirectionAndDateFromGreaterThanEqualAndPriceGreaterThanEqualAndPriceLessThanEqual(
-                client.getPreferenceCity(), client.getPreferenceDateFrom(), client.getPreferencePriceFrom(),
-                client.getPreferencePriceTo(), pageable).map(this::mapTour);*/
+        return t;
     }
 
     @Transactional(readOnly = true)

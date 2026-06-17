@@ -71,7 +71,7 @@ public class ManagerService {
     @Transactional
     public ManagerRs update(ManagerRq dto, Long id) {
         var entity = findById(id);
-        var updatedEntity = mapper.updateEntity(dto, entity);
+        var updatedEntity = mapper.updateEntity(dto, entity, passwordEncoder);
         return mapper.EntityToRs(updatedEntity);
     }
 

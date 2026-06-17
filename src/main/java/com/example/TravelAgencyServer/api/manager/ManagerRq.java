@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public record ManagerRq(
@@ -19,14 +20,14 @@ public record ManagerRq(
         String surName,
         @NotBlank
         @Past(message = "дата рождения должна быть в прошлом")
-        Date birthDate,
+        LocalDateTime birthDate,
         @NotBlank
         @Size (min = 6, max = 255, message = "длина email должна быть от 6 до 255 символов")
         @Pattern(regexp = "^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9.-]*\\.[a-zA-Z]{2,}$")
         String email,
-        @NotBlank
+        /*@NotBlank
         @Size (min = 6, max = 20)
-        String login,
+        String login,*/
         @NotBlank
         @Size(min = 6, max = 12)
         String password) {}

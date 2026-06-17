@@ -15,6 +15,7 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,7 +84,7 @@ public class ReservationService {
 
     @Transactional(readOnly = true)
     public Page<ReservationRs> getAll(int pageNumber, int pageSize) {
-        return repository.findAll(PageRequest.of(pageNumber, pageSize)).map(entity -> {
+        return repository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by("reservationDate").descending())).map(entity -> {
             var tour = tourService.mapTour(entity.getTour());
             return mapper.EntityToRs(entity, tour);
         });
@@ -91,7 +92,7 @@ public class ReservationService {
 
     @Transactional
     public Page<ReservationRs> getByDates(LocalDateTime startDate, LocalDateTime endDate, int pageNumber, int pageSize){
-        return repository.findByReservationDateBetween(startDate, endDate, PageRequest.of(pageNumber, pageSize))
+        return repository.findByReservationDateBetween(startDate, endDate, PageRequest.of(pageNumber, pageSize, Sort.by("reservationDate").descending()))
                 .map(entity -> {
                     var tour = tourService.mapTour(entity.getTour());
                     return mapper.EntityToRs(entity, tour);
@@ -101,7 +102,7 @@ public class ReservationService {
 
     @Transactional
     public Page<ReservationRs> getByClientId(Long clientId, int pageNumber, int pageSize){
-        return repository.findByClient_Id(clientId, PageRequest.of(pageNumber, pageSize))
+        return repository.findByClient_Id(clientId, PageRequest.of(pageNumber, pageSize, Sort.by("reservationDate").descending()))
                 .map(entity -> {
                     var tour = tourService.mapTour(entity.getTour());
                     return mapper.EntityToRs(entity, tour);
@@ -111,7 +112,7 @@ public class ReservationService {
     @Transactional
     public Page<ReservationRs> getByClientName(String name, int pageNumber, int pageSize){
         return repository.findByClient_FirstNameContainingIgnoreCaseOrClient_LastNameContainingIgnoreCaseOrClient_SurNameContainingIgnoreCase
-                (name, name, name, PageRequest.of(pageNumber, pageSize))
+                (name, name, name, PageRequest.of(pageNumber, pageSize, Sort.by("reservationDate").descending()))
                 .map(entity -> {
                     var tour = tourService.mapTour(entity.getTour());
                     return mapper.EntityToRs(entity, tour);
@@ -120,7 +121,7 @@ public class ReservationService {
 
     @Transactional
     public Page<ReservationRs> getByStatus(Status status, int pageNumber, int pageSize){
-        return repository.findByStatus(status, PageRequest.of(pageNumber, pageSize))
+        return repository.findByStatus(status, PageRequest.of(pageNumber, pageSize, Sort.by("reservationDate").descending()))
                 .map(entity -> {
                     var tour = tourService.mapTour(entity.getTour());
                     return mapper.EntityToRs(entity, tour);

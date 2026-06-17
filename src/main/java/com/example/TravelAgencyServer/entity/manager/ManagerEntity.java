@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class ManagerEntity {
     @Column(nullable = false)
     private String surName;
     @Column(nullable = false)
-    private Date birthDate;
+    private LocalDateTime birthDate;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false, unique = true)
@@ -31,7 +32,7 @@ public class ManagerEntity {
     private String password;
 
 
-    public ManagerEntity(String firstName, String lastName, String surName, Date birthDate, String email, String login, String password) {
+    public ManagerEntity(String firstName, String lastName, String surName, LocalDateTime birthDate, String email, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.surName = surName;

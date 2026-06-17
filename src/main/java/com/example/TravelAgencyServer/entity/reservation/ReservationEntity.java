@@ -24,7 +24,7 @@ public class ReservationEntity {
     private Long id;
 
     @Column
-    private Date reservationDate;
+    private LocalDateTime reservationDate;
 
     @ManyToOne
     @JoinColumn(name = "manager_id", nullable = false)
@@ -65,7 +65,7 @@ public class ReservationEntity {
     @Column
     private Double price;
 
-    public ReservationEntity(Date reservationDate, ManagerEntity manager, ClientEntity client, TourEntity tour,
+    public ReservationEntity(LocalDateTime reservationDate, ManagerEntity manager, ClientEntity client, TourEntity tour,
                              FlightEntity flightTo, FlightEntity flightFrom, HotelEntity hotel,
                              Status status, PaymentType paymentType, InsuranceType insuranceType, Double price) {
         this.reservationDate = reservationDate;

@@ -12,11 +12,13 @@ public interface ManagerMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "password", expression = "java(pswEnc.encode(dto.password()))")
     })
-
     ManagerEntity RqToEntity(ManagerRq dto, @Context PasswordEncoder pswEnc);
 
-    @Mapping(target = "id", ignore = true)
-    ManagerEntity updateEntity(ManagerRq dto, @MappingTarget ManagerEntity entity);
+    @Mappings({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "password", expression = "java(pswEnc.encode(dto.password()))")
+    })
+    ManagerEntity updateEntity(ManagerRq dto, @MappingTarget ManagerEntity entity, @Context PasswordEncoder pswEnc);
 
     ManagerRs EntityToRs(ManagerEntity dto);
 
